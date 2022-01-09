@@ -7,8 +7,8 @@
                               <div class="row align-items-center">
                                   <div class="col-md-8">
                                       <div class="page-header-title">
-                                          <h5 class="m-b-10">Matriz de diagnóstico</h5>
-                                          <p class="m-b-0">Descripción corta de módulo</p>
+                                          <h5 class="m-b-10">EMPRESA NOMBRE</h5>
+                                          <p class="m-b-0">Matriz de diagnóstico</p>
                                       </div>
                                   </div>
                                   <div class="col-md-4">
@@ -63,7 +63,7 @@
                                                             <div class="col-xl-12 col-md-12">
                                                                 <div class="card-block table-border-style">
                                                                     <div class="table-responsive">
-                                                                        <table class="table table-hover">
+                                                                        <table class="table table-xs table-hover">
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>Acción</th>

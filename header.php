@@ -252,28 +252,18 @@
                               </li>
                               
                           </ul>
-                          <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Objetivos</div>
-                          <ul class="pcoded-item pcoded-left-item">
-                              <li>
-                                  <a href="/views/objetivos_control/objetivos_control.php" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
-                                      <span class="pcoded-mtext" data-i18n="nav.form-components.main">Objetivos de control</span>
-                                      <span class="pcoded-mcaret"></span>
-                                  </a>
-                              </li>
-                          </ul>
 
                           <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Evaluación</div>
                           <ul class="pcoded-item pcoded-left-item">
                               <li>
-                                  <a href="form-elements-component.html" class="waves-effect waves-dark">
+                                  <a href="/views/evaluacion/evaluacion.php" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Evaluación</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="form-elements-component.html" class="waves-effect waves-dark">
+                                  <a href="/views/evaluacion/evaluacion_por_entidad.php" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Resumen de evaluación por entidad</span>
                                       <span class="pcoded-mcaret"></span>
@@ -284,14 +274,14 @@
                           <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Seguimiento</div>
                           <ul class="pcoded-item pcoded-left-item">
                               <li>
-                                  <a href="form-elements-component.html" class="waves-effect waves-dark">
+                                  <a href="/views/seguimiento/seguimiento_accion.php" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Seguimiento al plan de acción</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="form-elements-component.html" class="waves-effect waves-dark">
+                                  <a href="/views/seguimiento/resultado_accion.php" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Resultado del plan de acción</span>
                                       <span class="pcoded-mcaret"></span>
@@ -326,6 +316,14 @@
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                                   <ul class="pcoded-submenu">
+                                  
+                                    <li class="">
+                                          <a href="/views/catalogos/objetivos_control.php" class="waves-effect waves-dark">
+                                              <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                              <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-21">Objetivos de control</span>
+                                              <span class="pcoded-mcaret"></span>
+                                          </a>
+                                      </li>
                                       <li class="">
                                           <a href="javascript:void(0)" class="waves-effect waves-dark">
                                               <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
