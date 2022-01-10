@@ -1,26 +1,18 @@
 <?php
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
+$CFG->dbtype    = 'mysqli';
+$CFG->dblibrary = 'native';
+$CFG->dbhost    = 'localhost';
+$CFG->dbname    = 'grc';
+$CFG->dbuser    = 'root';
+$CFG->dbpass    = '';
+$CFG->wwwroot    = 'https://localhost';
 
-//phpinfo();
-
-class Cconexion{
-
-     function conexionBD(){
-
-          $host='localhost';
-          $dbname='grc_001';
-          $username='sa';
-          $password='admin123';
-          $puerto=1433;
-
-          try {
-               $conn = new PDO ("sqlsrv:Server=$host,$puerto;Database=$dbname","$username","$password");
-               echo "Se ha conectado a la base de datos";
-          } catch (PDOException $th) {
-               echo "No se ha conectado a la base de datos, error: ".$th;
-          }
-
-          return $conn;
-     }
+$mysqli= new mysqli($CFG->dbhost,$CFG->dbuser,$CFG->dbpass,$CFG->dbname);
+if(mysqli_connect_errno()){
+	echo "Problemas al conectarse con la BDD";
 }
-
+$mysqli->set_charset("utf8");
 ?>

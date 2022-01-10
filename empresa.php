@@ -1,3 +1,53 @@
+
+<?php
+require 'conexion.php';
+
+        session_start();
+
+            if(isset($_SESSION['username'])){
+              if($_SESSION['username']==""){
+
+                 // Si no se han enviado encabezados, enviar
+    if (!headers_sent()) {
+        //header('Location: https://ops-alpha.we-know.net/');
+        header('Location: '.$CFG->wwwroot.'');
+        exit;
+    }else{//si se han enviado haremos redirect desde javascript
+        echo '<script type="text/javascript">';
+        echo 'window.location.href="'.$CFG->wwwroot.'";';
+        echo '</script>';
+        echo '<noscript>';
+        echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'"/>';
+        echo '</noscript>';
+    }
+              }else{
+                  $usuarioactual=$_SESSION['username'];
+              }
+            }else{
+                if (!headers_sent()) {
+                    header('Location: '.$CFG->wwwroot.'/');
+                    exit;
+                }else{//si se han enviado haremos redirect desde javascript
+                    echo '<script type="text/javascript">';
+                    echo 'window.location.href="'.$CFG->wwwroot.'/";';
+                    echo '</script>';
+                    echo '<noscript>';
+                    echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'/>';
+                    echo '</noscript>';
+                }
+            }
+	
+            $empresas = '';
+            //Seleccionar una empresa
+    $sql = "SELECT * FROM cliente where status_empresa = 1 ";
+    if($consultaBD=$mysqli->query($sql)){
+        while($fila = mysqli_fetch_array($consultaBD)){
+            $empresas .= " <option value='{$fila['id']}'>{$fila['nombre']}</option>";
+        }
+    }
+    
+
+		?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -93,12 +143,12 @@
 
     <section class="login-block">
         <!-- Container-fluid starts -->
-        <div class="container" style="padding: 15%;">
+        <div class="container" >
             <div class="row">
                 <div class="col-sm-12">
                     <!-- Authentication card start -->
                     
-                        <form class="md-float-material form-material">
+                        <form class="md-float-material form-material" action="loguear_empresa.php" method="post">
                             <div class="text-center">
                                 <img src="/assets/images/logo.png" alt="logo.png">
                             </div>
@@ -106,22 +156,20 @@
                                 <div class="card-block">
                                     <div class="row m-b-20">
                                         <div class="col-md-12">
-                                            <h3 class="text-center">Iniciar sesión</h3>
+                                            <h3 class="text-center">Elegir una empresa</h3>
                                         </div>
                                     </div>
-                                    <div class="form-group form-primary">
-                                        <input type="text" name="email" class="form-control" required="">
-                                        <span class="form-bar"></span>
-                                        <label class="float-label">Usuario</label>
-                                    </div>
-                                    <div class="form-group form-primary">
-                                        <input type="password" name="password" class="form-control" required="">
-                                        <span class="form-bar"></span>
-                                        <label class="float-label">Contraseña</label>
-                                    </div>
+                                    <div class="form-group row">
+                                                                    <div class="col-sm-12">
+                                                                        <select name="empresa" class="form-control">
+                                                                            <option value="">Selecciona una opción</option>
+                                                                            <?php echo $empresas;?>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
                                     <div class="row m-t-30">
                                         <div class="col-md-12">
-                                            <button type="button" class="btn btn-primary btn-md btn-block waves-effect waves-light text-center m-b-20">Entrar</button>
+                                            <button type="submit" class="btn btn-primary btn-md btn-block waves-effect waves-light text-center m-b-20">Elegir</button>
                                         </div>
                                     </div>
                                     
@@ -156,3 +204,6 @@
 </body>
 
 </html>
+
+
+

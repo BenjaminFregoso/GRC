@@ -1,3 +1,62 @@
+<?php
+require 'conexion.php';
+
+        session_start();
+
+            if(isset($_SESSION['username'])){
+              if($_SESSION['username']==""){
+
+                 // Si no se han enviado encabezados, enviar
+    if (!headers_sent()) {
+        //header('Location: https://ops-alpha.we-know.net/');
+        header('Location: '.$CFG->wwwroot.'');
+        exit;
+    }else{//si se han enviado haremos redirect desde javascript
+        echo '<script type="text/javascript">';
+        echo 'window.location.href="'.$CFG->wwwroot.'";';
+        echo '</script>';
+        echo '<noscript>';
+        echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'"/>';
+        echo '</noscript>';
+    }
+              }else{
+                  $usuarioactual=$_SESSION['username'];
+              }
+            }else{
+                if (!headers_sent()) {
+                    header('Location: '.$CFG->wwwroot.'/');
+                    exit;
+                }else{//si se han enviado haremos redirect desde javascript
+                    echo '<script type="text/javascript">';
+                    echo 'window.location.href="'.$CFG->wwwroot.'/";';
+                    echo '</script>';
+                    echo '<noscript>';
+                    echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'/>';
+                    echo '</noscript>';
+                }
+            }
+           
+            class datos_global{
+                function get_global_usuario(){
+                    $usuario_sess = $_SESSION['username'];
+                    return $usuario_sess;
+                }
+                function get_global_empresa(){
+                    $empresa_sess = $_SESSION['empresa'];
+                    return $empresa_sess;
+                }
+               
+            }
+            $nombre_sess='';
+            $sql = "SELECT nombre_completo FROM usuarios where usuario = '{$_SESSION['username']}' AND status_usuario = 1";
+            
+            if($consultaBD=$mysqli->query($sql)){
+                $fila = mysqli_fetch_array($consultaBD);
+                $nombre_sess = $fila['nombre_completo'];
+            } 
+	
+
+		?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -187,7 +246,7 @@
                           <li class="user-profile header-notification">
                               <a href="#!" class="waves-effect waves-light">
                                   <img src="/assets/images/avatar.png" class="img-radius" alt="User-Profile-Image">
-                                  <span>Humberto Aguila</span> <!-- NOMBRE APELLIDO DB-->
+                                  <span><?php echo $nombre_sess; ?></span> <!-- NOMBRE APELLIDO DB-->
                                   <i class="ti-angle-down"></i>
                               </a>
                               <ul class="show-notification profile-notification">
@@ -207,7 +266,7 @@
                                       </a>
                                   </li>
                                   <li class="waves-effect waves-light">
-                                      <a href="auth-normal-sign-in.html">
+                                      <a href="<?php echo $CFG->wwwroot;?>?c=1">
                                           <i class="ti-layout-sidebar-left"></i> Cerrar sesión
                                       </a>
                                   </li>
@@ -227,7 +286,7 @@
                               <div class="main-menu-header">
                                   <img class="img-80 img-radius" src="/assets/images/avatar.png" alt="User-Profile-Image">
                                   <div class="user-details">
-                                      <span id="more-details">Humberto Aguila<i class="fa fa-caret-down"></i></span> <!-- NOMBRE APELLIDO DB-->
+                                      <span id="more-details"><?php echo $nombre_sess; ?><i class="fa fa-caret-down"></i></span> <!-- NOMBRE APELLIDO DB-->
                                   </div>
                               </div>
         
@@ -365,7 +424,7 @@
                               <li>
                                   <a href="form-elements-component.html" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
-                                      <span class="pcoded-mtext" data-i18n="nav.form-components.main">Planm de acción</span>
+                                      <span class="pcoded-mtext" data-i18n="nav.form-components.main">Plan de acción</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                               </li>
