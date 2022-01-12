@@ -1,11 +1,34 @@
+<?php
+require_once('../../header.php'); 
 
-<?php include '../../header.php'; ?>
+
+
+$lib = new datos_global();
+//Nombre empresa
+$id_empresa = $lib->get_global_empresa();
+$nombre_usuario = $lib->get_global_usuario();
+$empresa_sess='';
+  $sql = "SELECT * FROM cliente where id = $id_empresa AND status_empresa = 1 ";
+    if($consultaBD=$mysqli->query($sql)){
+        $fila = mysqli_fetch_array($consultaBD);
+        $empresa_sess .= $fila['nombre'];
+    } 
+
+
+ require_once('classes/lib.php'); 
+$evaluac = new evaluacion();
+$tabla = $evaluac->mostrar_tabla($id_empresa, '', "../../conexion.php"); 
+$version = $evaluac->mostrar_version($id_empresa, "../../conexion.php"); 
+?>
+
+
 <style>
     table, td, th{
     border-bottom: 1px solid #ddd;
     border: 1px solid #ddd;
 }
     </style>
+    <input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $id_empresa;?>">
                     <div class="pcoded-content">
                       <!-- Page-header start -->
                       <div class="page-header">
@@ -13,7 +36,7 @@
                               <div class="row align-items-center">
                                   <div class="col-md-8">
                                       <div class="page-header-title">
-                                          <h5 class="m-b-10">EMPRESA NOMBRE</h5>
+                                          <h5 class="m-b-10"><?php echo $empresa_sess;?></h5>
                                           <p class="m-b-0">Captura de evaluación</p>
                                       </div>
                                   </div>
@@ -62,11 +85,7 @@
                                                             <div class="col-xl-1 col-md-12">
                                                                 <label>Versión:</label>
                                                                 </br>
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
+                                                                <?php echo $version; ?>
                                                             </div>
 
                                                             <div class="col-xl-1 col-md-12">
@@ -125,52 +144,8 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="row">
-                                                            <div class="col-xl-12 col-md-12">
-</br>
-                                                                <div class="card-block table-border-style">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table table-xs table-hover">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Entidad</th>
-                                                                                    <th>Proceso</th>
-                                                                                    <th>Tipo de riesgo</th>
-                                                                                    <th>Tipo de control</th>
-                                                                                    <th>Objetivos de control</th>
-                                                                                    <th>No aplica</th>
-                                                                                    <th>Sin control</th>
-                                                                                    <th>Documentado</th>
-                                                                                    <th>Autorizado</th>
-                                                                                    <th>Difundido</th>
-                                                                                    <th>Ejecutado</th>
-                                                                                    <th>Monitoreado</th>
-                                                                                    <th>Total de puntos</th>
-                                                                                    <th>Estatus</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                        <div class="row" id="tabla_principal" name="tabla_principal">
+                                                       <?php echo $tabla;?>
                                                         </div>
 
                                                         <div class="row">
@@ -304,3 +279,4 @@
                                 <div id="styleSelector"> </div>
                             </div>
                        <?php include '../../footer.php'; ?>
+                       <script type="text/javascript" src="assets/evaluacion.js"></script>

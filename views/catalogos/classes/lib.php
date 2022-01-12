@@ -489,9 +489,7 @@ class objetivos_control{
 
                         <div class="row">
                             <div class="col-xl-12 col-md-12 " style="text-align: center;">
-                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_edicion();">Guardar</button>
-                                <button class="btn btn-danger waves-effect waves-light" onclick="eliminar_control();">Eliminar</button>
-                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_nuevo();">Guardar</button>
                             </div>
                         </div>
                    
@@ -509,6 +507,36 @@ class objetivos_control{
 		}else {
 			$respuesta =  "Error: Error al actualizar control ".$sql_gaurdar;
 		}
+        return $respuesta;
+    }
+
+    function guardar_nuevo($codigo, $descripcion, $select_entidad, $select_proceso, $select_riesgo, $select_control, $referencia_form, $riesgo_form, $documentado_form, $autorizado_form,$difundido_form, $ejecutado_form, $monitoreado_form, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $id_actual= '';
+        $sql_consulta = "SELECT id_control FROM control  
+        ORDER BY control.id_control  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_control'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+        
+         $sql_gaurdar = "INSERT INTO control (id_control, descripcion, id_proceso, id_entidad, id_tipo_riesgo, id_tipo_control, documentado, autorizado,
+        difundido, ejecutado, monitoreado, referencia, riesgo, status_control)
+        VALUES ('$id_guardar', '$descripcion', '$select_proceso','$select_entidad','$select_riesgo','$select_control',$documentado_form,$autorizado_form,
+        $difundido_form,$ejecutado_form,$monitoreado_form,'$referencia_form','$riesgo_form', 1)";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar control ".$sql_gaurdar;
+		} 
         return $respuesta;
     }
 
