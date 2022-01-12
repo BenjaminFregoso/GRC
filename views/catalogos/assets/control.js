@@ -23,6 +23,25 @@ var params = {
   });
 }
 
+function guardar_edicion(){
+  var codigo = $(".codigo_form").val();
+  var descripcion = $(".descripcion_form").val();
+  var select_entidad = $(".select_entidad").val();
+  var select_proceso = $(".select_proceso").val();
+  var select_riesgo = $(".select_riesgo").val();
+  var select_control = $(".select_control").val();
+  var referencia_form = $(".referencia_form").val();
+  var riesgo_form = $(".riesgo_form").val();
+
+  var documentado_form = $(".documentado_form").val();
+  var autorizado_form = $(".autorizado_form").val();
+  var difundido_form = $(".difundido_form").val();
+  var ejecutado_form = $(".ejecutado_form").val();
+  var monitoreado_form = $(".monitoreado_form").val();
+  
+  
+}
+
 
 $('#buscar_codigo').keyup(function() {
     var dato = $('#buscar_codigo').val();

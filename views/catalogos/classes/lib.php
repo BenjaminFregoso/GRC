@@ -144,21 +144,21 @@ class objetivos_control{
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Código</label>
                                         <div class="col-sm-10">
-                                            <input type="text" id="codigo_form" class="form-control" placeholder="Código" value="'.$codigo.'" ReadOnly>
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$codigo.'" ReadOnly>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Descripción</label>
                                         <div class="col-sm-10">
-                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" placeholder="Escribe una descripción">'.$descripcion.'</textarea>
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción">'.$descripcion.'</textarea>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Entidad</label>
                                         <div class="col-sm-10">
-                                        <select name="select" class="form-control">
+                                        <select name="select_entidad" id="select_entidad" class="form-control">
                                             <option value="0">Selecciona una opción</option>
                                             '.$entidad.'
                                         </select>
@@ -168,7 +168,7 @@ class objetivos_control{
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Proceso</label>
                                         <div class="col-sm-10">
-                                        <select name="select" class="form-control">
+                                        <select name="select_proceso" id="select_proceso" class="form-control">
                                             <option value="0">Selecciona una opción</option>
                                             '.$proceso.'
                                         </select>
@@ -178,7 +178,7 @@ class objetivos_control{
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Tipo de riesgo</label>
                                         <div class="col-sm-10">
-                                        <select name="select" class="form-control">
+                                        <select name="select_riesgo" name="select_riesgo" class="form-control">
                                             <option value="0">Selecciona una opción</option>
                                             '.$tipo_riesgo .'
                                         </select>
@@ -188,7 +188,7 @@ class objetivos_control{
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Tipo de control</label>
                                         <div class="col-sm-10">
-                                        <select name="select" class="form-control">
+                                        <select name="select_control" name="select_control" class="form-control">
                                             <option value="0">Selecciona una opción</option>
                                             '.$tipo_control.'
                                         </select>
@@ -198,14 +198,14 @@ class objetivos_control{
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Referencia</label>
                                         <div class="col-sm-10">
-                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" placeholder="Escribe una referencia">'.$referencia.'</textarea>
+                                            <textarea rows="5" cols="5" class="form-control" id="referencia_form" name="referencia_form" placeholder="Escribe una referencia">'.$referencia.'</textarea>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Riesgo</label>
                                         <div class="col-sm-10">
-                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" placeholder="Escribe el riesgo">'.$riesgo.'</textarea>
+                                            <textarea rows="5" cols="5" class="form-control" id="riesgo_form" name="riesgo_form" placeholder="Escribe el riesgo">'.$riesgo.'</textarea>
                                         </div>
                                     </div>
 
@@ -301,6 +301,7 @@ class objetivos_control{
                             <div class="col-xl-12 col-md-12 " style="text-align: center;">
                                 <button class="btn btn-success waves-effect waves-light">Guardar</button>
                                 <button class="btn btn-danger waves-effect waves-light">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
                             </div>
                         </div>
                    
@@ -451,6 +452,7 @@ class objetivos_control{
                             <div class="col-xl-12 col-md-12 " style="text-align: center;">
                                 <button class="btn btn-success waves-effect waves-light">Guardar</button>
                                 <button class="btn btn-danger waves-effect waves-light">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light">Cancelar</button>
                             </div>
                         </div>
                    
