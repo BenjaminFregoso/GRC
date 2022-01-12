@@ -82,7 +82,7 @@ $tabla = $lib_control->obtener_datos('', "../../conexion.php");
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-xl-12 col-md-12 " style="text-align: center;">
-                                                                <button class="btn btn-primary waves-effect waves-light ">Nuevo</button>
+                                                                <button class="btn btn-primary waves-effect waves-light " onclick="nuevo();">Nuevo</button>
                                                             </div>
                                                         </div>
                                                     </div>
