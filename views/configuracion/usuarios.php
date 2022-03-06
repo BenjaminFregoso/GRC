@@ -15,7 +15,7 @@ $empresa_sess='';
     } 
 
 require_once('classes/lib.php'); 
-$lib_control = new objetivos_control();
+$lib_control = new usuarios();
 $tabla = $lib_control->obtener_datos('', "../../conexion.php");  
 ?>
                     <div class="pcoded-content">
@@ -26,7 +26,7 @@ $tabla = $lib_control->obtener_datos('', "../../conexion.php");
                                   <div class="col-md-8">
                                       <div class="page-header-title">
                                           <h5 class="m-b-10"><?php echo $empresa_sess;?></h5>
-                                          <p class="m-b-0">Matriz de diagnóstico</p>
+                                          <p class="m-b-0">Usuarios</p>
                                       </div>
                                   </div>
                                   <div class="col-md-4">
@@ -34,7 +34,7 @@ $tabla = $lib_control->obtener_datos('', "../../conexion.php");
                                           <li class="breadcrumb-item">
                                               <a href="index.html"> <i class="fa fa-home"></i> </a>
                                           </li>
-                                          <li class="breadcrumb-item"><a href="#!">Catálogos</a>
+                                          <li class="breadcrumb-item"><a href="#!">Configuración</a>
                                           </li>
                                       </ul>
                                   </div>
@@ -56,7 +56,7 @@ $tabla = $lib_control->obtener_datos('', "../../conexion.php");
                                             <div class="col-xl-12 col-md-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Catálogo</h5>
+                                                        <h5>Usuarios</h5>
                                                         <span class="text-muted">Descripción corta de funcionalidad</span>
                                                         <div class="card-header-right">
                                                             <ul class="list-unstyled card-option">
@@ -72,7 +72,7 @@ $tabla = $lib_control->obtener_datos('', "../../conexion.php");
                                                         <!--info dentro-->
                                                         <div class="row">
                                                             <div class="col-xl-12 col-md-12">
-                                                                <label>Localizar por código o descripción:</label>
+                                                                <label>Localizar por nombre:</label>
                                                                 </br>
                                                                 <input type="text" class="form-control" id="buscar_codigo" name="buscar_codigo" placeholder="Introduce el código o descripción">
                                                             </div>
@@ -96,4 +96,4 @@ $tabla = $lib_control->obtener_datos('', "../../conexion.php");
                             </div>
                            
                        <?php include '../../footer.php'; ?>
-                       <script type="text/javascript" src="assets/control.js"></script>
+                       <script type="text/javascript" src="assets/usuario.js"></script>

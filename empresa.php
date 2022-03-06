@@ -2,10 +2,11 @@
 <?php
 require 'conexion.php';
 
-        session_start();
-
-            if(isset($_SESSION['username'])){
-              if($_SESSION['username']==""){
+        //session_start();
+        
+        
+            if(isset($_COOKIE['hdrtydfnghfjdfgh'])){
+              if($_COOKIE['hdrtydfnghfjdfgh']==""){
 
                  // Si no se han enviado encabezados, enviar
     if (!headers_sent()) {
@@ -21,7 +22,7 @@ require 'conexion.php';
         echo '</noscript>';
     }
               }else{
-                  $usuarioactual=$_SESSION['username'];
+                  $usuarioactual=$_COOKIE['hdrtydfnghfjdfgh'];
               }
             }else{
                 if (!headers_sent()) {

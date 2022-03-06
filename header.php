@@ -1,10 +1,10 @@
 <?php
 require 'conexion.php';
 
-        session_start();
+        //session_start();
 
-            if(isset($_SESSION['username'])){
-              if($_SESSION['username']==""){
+            if(isset($_COOKIE['hdrtydfnghfjdfgh'])){
+              if($_COOKIE['hdrtydfnghfjdfgh']==""){
 
                  // Si no se han enviado encabezados, enviar
     if (!headers_sent()) {
@@ -20,7 +20,7 @@ require 'conexion.php';
         echo '</noscript>';
     }
               }else{
-                  $usuarioactual=$_SESSION['username'];
+                  $usuarioactual=$_COOKIE['hdrtydfnghfjdfgh'];
               }
             }else{
                 if (!headers_sent()) {
@@ -38,18 +38,18 @@ require 'conexion.php';
            
             class datos_global{
                 function get_global_usuario(){
-                    $usuario_sess = $_SESSION['username'];
+                    $usuario_sess = $_COOKIE['hdrtydfnghfjdfgh'];
                     return $usuario_sess;
                 }
                 function get_global_empresa(){
-                    $empresa_sess = $_SESSION['empresa'];
+                    $empresa_sess = $_COOKIE['ergdfsggvbvc'];
                     return $empresa_sess;
                 }
                
             }
             $nombre_sess='';
-            $sql = "SELECT nombre_completo FROM usuarios where usuario = '{$_SESSION['username']}' AND status_usuario = 1";
-            
+            $sql = "SELECT nombre_completo FROM usuarios where id = {$_COOKIE['hdrtydfnghfjdfgh']} AND status_usuario = 1";
+            //echo $sql;
             if($consultaBD=$mysqli->query($sql)){
                 $fila = mysqli_fetch_array($consultaBD);
                 $nombre_sess = $fila['nombre_completo'];
@@ -316,14 +316,14 @@ require 'conexion.php';
                           <ul class="pcoded-item pcoded-left-item">
                               <li>
                                   <a href="/views/evaluacion/evaluacion.php" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
+                                      <span class="pcoded-micon"><i class="ti-write"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Evaluación</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                               </li>
                               <li>
                                   <a href="/views/evaluacion/evaluacion_por_entidad.php" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
+                                      <span class="pcoded-micon"><i class="ti-bar-chart"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Resumen de evaluación por entidad</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
@@ -334,14 +334,14 @@ require 'conexion.php';
                           <ul class="pcoded-item pcoded-left-item">
                               <li>
                                   <a href="/views/seguimiento/seguimiento_accion.php" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
+                                      <span class="pcoded-micon"><i class="ti-clipboard"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Seguimiento al plan de acción</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                               </li>
                               <li>
                                   <a href="/views/seguimiento/resultado_accion.php" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
+                                      <span class="pcoded-micon"><i class="ti-bar-chart-alt"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Resultado del plan de acción</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
@@ -352,14 +352,14 @@ require 'conexion.php';
                           <ul class="pcoded-item pcoded-left-item">
                               <li>
                                   <a href="form-elements-component.html" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
+                                      <span class="pcoded-micon"><i class="ti-check"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Cédulas de auditoría</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                               </li>
                               <li>
                                   <a href="form-elements-component.html" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
+                                      <span class="pcoded-micon"><i class="ti-pie-chart"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Resultado de auditoría</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
@@ -370,7 +370,7 @@ require 'conexion.php';
                           <ul class="pcoded-item pcoded-left-item">
                               <li class="pcoded-hasmenu ">
                                   <a href="javascript:void(0)" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-direction-alt"></i><b>M</b></span>
+                                      <span class="pcoded-micon"><i class="ti-book"></i><b>M</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.menu-levels.main">Catálogos</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
@@ -384,14 +384,14 @@ require 'conexion.php';
                                           </a>
                                       </li>
                                       <li class="">
-                                          <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                          <a href="/views/catalogos/entidades.php" class="waves-effect waves-dark">
                                               <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                               <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-21">Entidad</span>
                                               <span class="pcoded-mcaret"></span>
                                           </a>
                                       </li>
-                                      <li class="pcoded-hasmenu ">
-                                          <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                      <li class="">
+                                          <a href="/views/catalogos/procesos.php" class="waves-effect waves-dark">
                                               <span class="pcoded-micon"><i class="ti-direction-alt"></i></span>
                                               <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-22.main">Procesos</span>
                                               <span class="pcoded-mcaret"></span>
@@ -399,22 +399,30 @@ require 'conexion.php';
                                           
                                       </li>
                                       <li class="">
-                                          <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                          <a href="/views/catalogos/tipo_riesgo.php" class="waves-effect waves-dark">
                                               <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                               <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-23">Tipo de riesgo</span>
                                               <span class="pcoded-mcaret"></span>
                                           </a>
                                       </li>
                                       <li class="">
-                                          <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                          <a href="/views/catalogos/tipo_control.php" class="waves-effect waves-dark">
                                               <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                               <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-23">Tipo de control</span>
                                               <span class="pcoded-mcaret"></span>
                                           </a>
                                       </li>
+                                      <li class="">
+                                          <a href="/views/catalogos/giros.php" class="waves-effect waves-dark">
+                                              <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                              <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-21">Giro</span>
+                                              <span class="pcoded-mcaret"></span>
+                                          </a>
+                                      </li>
                                   </ul>
                               </li>
-                              <li>
+
+                              <!--<li>
                                   <a href="form-elements-component.html" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Diagnóstico</span>
@@ -434,17 +442,38 @@ require 'conexion.php';
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Auditoría</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
-                              </li>
-                              <li>
-                                  <a href="form-elements-component.html" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
-                                      <span class="pcoded-mtext" data-i18n="nav.form-components.main">Configuración</span>
+                              </li>-->
+                              
+                              <li class="pcoded-hasmenu ">
+                                  <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                      <span class="pcoded-micon"><i class="ti-settings"></i><b>M</b></span>
+                                      <span class="pcoded-mtext" data-i18n="nav.menu-levels.main">Configuración</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
+                                  <ul class="pcoded-submenu">
+                                  
+                                    <li class="">
+                                          <a href="/views/configuracion/usuarios.php" class="waves-effect waves-dark">
+                                              <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                              <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-21">Usuarios</span>
+                                              <span class="pcoded-mcaret"></span>
+                                          </a>
+                                    </li>
+
+                                    <li class="">
+                                          <a href="/views/configuracion/compania.php" class="waves-effect waves-dark">
+                                              <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                              <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-21">Compañías</span>
+                                              <span class="pcoded-mcaret"></span>
+                                          </a>
+                                    </li>
+
+                                  </ul>
                               </li>
+                              
                               <li>
                                   <a href="form-elements-component.html" class="waves-effect waves-dark">
-                                      <span class="pcoded-micon"><i class="ti-layers"></i><b>OC</b></span>
+                                      <span class="pcoded-micon"><i class="ti-help"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Ayuda</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>

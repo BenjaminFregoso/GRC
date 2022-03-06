@@ -1,5 +1,6 @@
 <?php
 class objetivos_control{
+
     function obtener_datos($codigo = null, $conexion){
         include $conexion;
         $html = '';
@@ -321,6 +322,19 @@ class objetivos_control{
 
         $tipo_control = '';
 
+        $sql_consulta = "SELECT id_control FROM control  
+        ORDER BY control.id_control  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_control'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
 
     
         
@@ -368,7 +382,7 @@ class objetivos_control{
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Código</label>
                                         <div class="col-sm-10">
-                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$id_guardar.'" readOnly>
                                         </div>
                                     </div>
 
@@ -552,4 +566,1257 @@ class objetivos_control{
     }
 
 }
+
+class entidad{
+
+    function obtener_datos($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $contenido = '';
+        $descripcion = '';
+        $sql_consulta = "SELECT * FROM entidad WHERE (id_entidad LIKE '%$codigo%' OR descripcion LIKE '%$codigo%') AND status_entidad = 1";
+         $query_servicio = $mysqli->query($sql_consulta);
+		if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr><th scope="row">
+                <button class="btn waves-effect waves-dark btn-info btn-outline-info btn-icon" onclick="editar(\''.$fila['id_entidad'].'\')">
+                    <i class="ti-pencil-alt2" style="padding-left: 4px; padding-top: -3px;">
+                    </i>
+                </button>
+                </th>
+                <td><p style="padding-top: 12px; text-align: center;">'.$fila['id_entidad'].'</p></td>
+                <td><p style="padding-top: 12px;">'.$fila['descripcion'].'</p></td></tr>';
+               
+            }
+            
+        }   
+        
+        $html .= '
+            <div class="col-xl-12 col-md-12">
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-xs table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Acción</th>
+                                    <th style="width: 15%;">Código</th>
+                                    <th style="width: 70%;">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            '.$contenido.'
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>';
+
+        return $html;
+    }
+
+    function detalles($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $codigo_seleccionado = '';
+        $descripcion = '';
+
+        $sql_consulta_control = "SELECT * FROM entidad WHERE id_entidad = '$codigo' AND status_entidad = 1";
+
+        $query_servicio = $mysqli->query($sql_consulta_control);
+		if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $descripcion = $fila['descripcion'];
+            $codigo_seleccionado = $fila['id_entidad'];
+        }
+        
+       
+
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Modificar entidad: '.$codigo_seleccionado.'</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$codigo_seleccionado.'" ReadOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción">'.$descripcion.'</textarea>
+                                        </div>
+                                    </div>
+
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_edicion();">Guardar</button>
+                                <button class="btn btn-danger waves-effect waves-light" onclick="eliminar_control();">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    function nuevo($conexion){
+        include $conexion;
+        $sql_consulta = "SELECT id_entidad FROM entidad  
+        ORDER BY entidad.id_entidad  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_entidad'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+
+        $html = '';
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Nueva entidad</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$id_guardar.'" readOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_nuevo();">Guardar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    
+    function guardar_edicion($codigo, $descripcion, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $sql_gaurdar = "UPDATE entidad SET descripcion='$descripcion' WHERE id_entidad = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar control ".$sql_gaurdar;
+		}
+        return $respuesta;
+    }
+
+    function guardar_nuevo($codigo, $descripcion, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $id_actual= '';
+        $sql_consulta = "SELECT id_entidad FROM entidad  
+        ORDER BY entidad.id_entidad  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_entidad'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+        
+         $sql_gaurdar = "INSERT INTO entidad (id_entidad, descripcion, status_entidad)
+        VALUES ('$id_guardar', '$descripcion', 1)";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar control ".$sql_gaurdar;
+		} 
+        return $respuesta;
+    }
+
+    function eliminar_control($codigo, $conexion){
+        include $conexion;
+        $respuesta = 0;
+        $sql_gaurdar = "UPDATE entidad SET status_entidad = 0 WHERE id_entidad = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al eliminar ".$sql_gaurdar;
+		}
+    }
+
+
+}
+
+
+class procesos{
+
+    function obtener_datos($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $contenido = '';
+        $descripcion = '';
+        $sql_consulta = "SELECT * FROM proceso WHERE (id_proceso LIKE '%$codigo%' OR descripcion LIKE '%$codigo%') AND status_proceso = 1";
+         $query_servicio = $mysqli->query($sql_consulta);
+		if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr><th scope="row">
+                <button class="btn waves-effect waves-dark btn-info btn-outline-info btn-icon" onclick="editar(\''.$fila['id_proceso'].'\')">
+                    <i class="ti-pencil-alt2" style="padding-left: 4px; padding-top: -3px;">
+                    </i>
+                </button>
+                </th>
+                <td><p style="padding-top: 12px; text-align: center;">'.$fila['id_proceso'].'</p></td>
+                <td><p style="padding-top: 12px;">'.$fila['descripcion'].'</p></td></tr>';
+               
+            }
+            
+        }   
+        
+        $html .= '
+            <div class="col-xl-12 col-md-12">
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-xs table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Acción</th>
+                                    <th style="width: 15%;">Código</th>
+                                    <th style="width: 70%;">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            '.$contenido.'
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>';
+
+        return $html;
+    }
+
+    function detalles($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $descripcion = '';
+        $ind_riesgo_uno= '';
+        $ind_riesgo_dos= '';
+        $ind_riesgo_tres= '';
+        $ind_riesgo_cuatro= '';
+        $ind_riesgo_cinco= '';
+        $ind_riesgo_seis= '';
+        $ind_riesgo_siete= '';
+        $ind_riesgo_ocho= '';
+        $ind_riesgo_nueve= '';
+        $ind_riesgo_diez= '';
+
+        $sql_consulta_control = "SELECT * FROM proceso WHERE id_proceso = '$codigo' AND status_proceso = 1";
+
+        $query_servicio = $mysqli->query($sql_consulta_control);
+		if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $descripcion = $fila['descripcion'];
+            $ind_riesgo_uno= $fila['ind_riesgo_uno'];
+            $ind_riesgo_dos= $fila['ind_riesgo_dos'];
+            $ind_riesgo_tres= $fila['ind_riesgo_tres'];
+            $ind_riesgo_cuatro= $fila['ind_riesgo_cuatro'];
+            $ind_riesgo_cinco= $fila['ind_riesgo_cinco'];
+            $ind_riesgo_seis= $fila['ind_riesgo_seis'];
+            $ind_riesgo_siete= $fila['ind_riesgo_siete'];
+            $ind_riesgo_ocho= $fila['ind_riesgo_ocho'];
+            $ind_riesgo_nueve= $fila['ind_riesgo_nueve'];
+            $ind_riesgo_diez= $fila['ind_riesgo_diez'];
+        }
+        
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Modificar objetivo de control: '.$codigo.'</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$codigo.'" ReadOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción">'.$descripcion.'</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-xs table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 50%;">%</th>
+                                                                <th style="width: 50%;">Nivel</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_diez" name="ind_riesgo_diez" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_diez.'"></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">10</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_nueve" name="ind_riesgo_nueve" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_nueve.'"></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">9</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_ocho" name="ind_riesgo_ocho" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_ocho.'"></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">8</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_siete" name="ind_riesgo_siete" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_siete.'"></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">7</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-warning"><input type="text" id="ind_riesgo_seis" name="ind_riesgo_seis" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_seis.'"></td>
+                                                                <td class="bg-warning"><p style="padding-top: 12px; text-align: center;">6</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-warning"><input type="text" id="ind_riesgo_cinco" name="ind_riesgo_cinco" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_cinco.'"></td>
+                                                                <td class="bg-warning"><p style="padding-top: 12px; text-align: center;">5</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-warning"><input type="text" id="ind_riesgo_cuatro" name="ind_riesgo_cuatro" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_cuatro.'"></td>
+                                                                <td class="bg-warning"><p style="padding-top: 12px; text-align: center;">4</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-success"><input type="text" id="ind_riesgo_tres" name="ind_riesgo_tres" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_tres.'"></td>
+                                                                <td class="bg-success"><p style="padding-top: 12px; text-align: center;">3</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-success"><input type="text" id="ind_riesgo_dos" name="ind_riesgo_dos" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_dos.'"></td>
+                                                                <td class="bg-success"><p style="padding-top: 12px; text-align: center;">2</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-success"><input type="text" id="ind_riesgo_uno" name="ind_riesgo_uno" class="form-control input-centrado" placeholder="" value="'.$ind_riesgo_uno.'"></td>
+                                                                <td class="bg-success"><p style="padding-top: 12px; text-align: center;">1</p></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_edicion();">Guardar</button>
+                                <button class="btn btn-danger waves-effect waves-light" onclick="eliminar_control();">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    function nuevo($conexion){
+        include $conexion;
+        $html = '';
+
+        $sql_consulta = "SELECT id_proceso FROM proceso  
+        ORDER BY proceso.id_proceso  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_proceso'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+
+    
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Modificar objetivo de control: '.$id_guardar.'</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$id_guardar.'" ReadOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-xs table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 50%;">%</th>
+                                                                <th style="width: 50%;">Nivel</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_diez" name="ind_riesgo_diez" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">10</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_nueve" name="ind_riesgo_nueve" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">9</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_ocho" name="ind_riesgo_ocho" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">8</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-danger"><input type="text" id="ind_riesgo_siete" name="ind_riesgo_siete" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-danger"><p style="padding-top: 12px; text-align: center;">7</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-warning"><input type="text" id="ind_riesgo_seis" name="ind_riesgo_seis" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-warning"><p style="padding-top: 12px; text-align: center;">6</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-warning"><input type="text" id="ind_riesgo_cinco" name="ind_riesgo_cinco" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-warning"><p style="padding-top: 12px; text-align: center;">5</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-warning"><input type="text" id="ind_riesgo_cuatro" name="ind_riesgo_cuatro" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-warning"><p style="padding-top: 12px; text-align: center;">4</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-success"><input type="text" id="ind_riesgo_tres" name="ind_riesgo_tres" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-success"><p style="padding-top: 12px; text-align: center;">3</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-success"><input type="text" id="ind_riesgo_dos" name="ind_riesgo_dos" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-success"><p style="padding-top: 12px; text-align: center;">2</p></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td-proceso bg-success"><input type="text" id="ind_riesgo_uno" name="ind_riesgo_uno" class="form-control input-centrado" placeholder="" value=""></td>
+                                                                <td class="bg-success"><p style="padding-top: 12px; text-align: center;">1</p></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                            <button class="btn btn-success waves-effect waves-light" onclick="guardar_nuevo();">Guardar</button>
+                            </div>
+                        </div>
+                   
+        ';
+
+        return $html;
+    }
+
+    function guardar_edicion($codigo, $descripcion, $ind_riesgo_uno, $ind_riesgo_dos, $ind_riesgo_tres,$ind_riesgo_cuatro,$ind_riesgo_cinco,$ind_riesgo_seis, $ind_riesgo_siete,$ind_riesgo_ocho,$ind_riesgo_nueve,$ind_riesgo_diez,$conexion){
+        include $conexion;
+        
+        $respuesta = 0; 
+        $sql_gaurdar = "UPDATE proceso SET descripcion='$descripcion', ind_riesgo_uno=$ind_riesgo_uno, ind_riesgo_dos=$ind_riesgo_dos, ind_riesgo_tres=$ind_riesgo_tres, ind_riesgo_cuatro=$ind_riesgo_cuatro, 
+        ind_riesgo_cinco=$ind_riesgo_cinco, ind_riesgo_seis=$ind_riesgo_seis, ind_riesgo_siete=$ind_riesgo_siete, ind_riesgo_ocho=$ind_riesgo_ocho, ind_riesgo_nueve=$ind_riesgo_nueve, ind_riesgo_diez=$ind_riesgo_diez WHERE id_proceso = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar proceso ".$sql_gaurdar;
+		}
+        return $respuesta;
+    }
+
+    function guardar_nuevo($codigo, $descripcion, $ind_riesgo_uno, $ind_riesgo_dos, $ind_riesgo_tres,$ind_riesgo_cuatro,$ind_riesgo_cinco,$ind_riesgo_seis, $ind_riesgo_siete,$ind_riesgo_ocho,$ind_riesgo_nueve,$ind_riesgo_diez,$conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $id_actual= '';
+        $sql_consulta = "SELECT id_proceso FROM proceso  
+        ORDER BY proceso.id_proceso  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_proceso'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+        
+         $sql_gaurdar = "INSERT INTO proceso (id_proceso, descripcion, ind_riesgo_uno, ind_riesgo_dos, ind_riesgo_tres,ind_riesgo_cuatro,
+         ind_riesgo_cinco,ind_riesgo_seis,ind_riesgo_siete,ind_riesgo_ocho,ind_riesgo_nueve,ind_riesgo_diez, status_proceso)
+        VALUES ('$id_guardar', '$descripcion', $ind_riesgo_uno, $ind_riesgo_dos, $ind_riesgo_tres,$ind_riesgo_cuatro,
+        $ind_riesgo_cinco,$ind_riesgo_seis, $ind_riesgo_siete,$ind_riesgo_ocho,$ind_riesgo_nueve,$ind_riesgo_diez, 1)";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar proceso ".$sql_gaurdar;
+		} 
+        return $respuesta;
+    }
+
+    function eliminar_control($codigo, $conexion){
+        include $conexion;
+        $respuesta = 0;
+        $sql_gaurdar = "UPDATE proceso SET status_proceso = 0 WHERE id_proceso = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al eliminar ".$sql_gaurdar;
+		}
+    }
+
+}
+
+class tipo_riesgo{
+
+    function obtener_datos($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $contenido = '';
+        $descripcion = '';
+        $sql_consulta = "SELECT * FROM tipo_riesgo WHERE (id_tipo_riesgo LIKE '%$codigo%' OR descripcion LIKE '%$codigo%') AND status_riesgo = 1";
+         $query_servicio = $mysqli->query($sql_consulta);
+		if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr><th scope="row">
+                <button class="btn waves-effect waves-dark btn-info btn-outline-info btn-icon" onclick="editar(\''.$fila['id_tipo_riesgo'].'\')">
+                    <i class="ti-pencil-alt2" style="padding-left: 4px; padding-top: -3px;">
+                    </i>
+                </button>
+                </th>
+                <td><p style="padding-top: 12px; text-align: center;">'.$fila['id_tipo_riesgo'].'</p></td>
+                <td><p style="padding-top: 12px;">'.$fila['descripcion'].'</p></td></tr>';
+               
+            }
+            
+        }   
+        
+        $html .= '
+            <div class="col-xl-12 col-md-12">
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-xs table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Acción</th>
+                                    <th style="width: 15%;">Código</th>
+                                    <th style="width: 70%;">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            '.$contenido.'
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>';
+
+        return $html;
+    }
+
+    function detalles($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $codigo_seleccionado = '';
+        $descripcion = '';
+
+        $sql_consulta_control = "SELECT * FROM tipo_riesgo WHERE id_tipo_riesgo = '$codigo' AND status_riesgo = 1";
+
+        $query_servicio = $mysqli->query($sql_consulta_control);
+		if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $descripcion = $fila['descripcion'];
+            $codigo_seleccionado = $fila['id_tipo_riesgo'];
+        }
+        
+       
+
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Modificar tipo de riesgo: '.$codigo_seleccionado.'</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$codigo_seleccionado.'" ReadOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción">'.$descripcion.'</textarea>
+                                        </div>
+                                    </div>
+
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_edicion();">Guardar</button>
+                                <button class="btn btn-danger waves-effect waves-light" onclick="eliminar_control();">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    function nuevo($conexion){
+        include $conexion;
+        $sql_consulta = "SELECT id_tipo_riesgo FROM tipo_riesgo  
+        ORDER BY tipo_riesgo.id_tipo_riesgo  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_tipo_riesgo'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+
+        $html = '';
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Nuevo tipo de riesgo</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$id_guardar.'" readOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_nuevo();">Guardar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    
+    function guardar_edicion($codigo, $descripcion, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $sql_gaurdar = "UPDATE tipo_riesgo SET descripcion='$descripcion' WHERE id_tipo_riesgo = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar tipo de riesgo ".$sql_gaurdar;
+		}
+        return $respuesta;
+    }
+
+    function guardar_nuevo($codigo, $descripcion, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $id_actual= '';
+        $sql_consulta = "SELECT id_tipo_riesgo FROM tipo_riesgo  
+        ORDER BY tipo_riesgo.id_tipo_riesgo  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_tipo_riesgo'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+        
+         $sql_gaurdar = "INSERT INTO tipo_riesgo (id_tipo_riesgo, descripcion, status_riesgo)
+        VALUES ('$id_guardar', '$descripcion', 1)";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar tipo de riesgo ".$sql_gaurdar;
+		} 
+        return $respuesta;
+    }
+
+    function eliminar_control($codigo, $conexion){
+        include $conexion;
+        $respuesta = 0;
+        $sql_gaurdar = "UPDATE tipo_riesgo SET status_riesgo = 0 WHERE id_tipo_riesgo = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al eliminar ".$sql_gaurdar;
+		}
+    }
+}
+
+
+class tipo_control{
+
+    function obtener_datos($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $contenido = '';
+        $descripcion = '';
+        $sql_consulta = "SELECT * FROM tipo_control WHERE (id_tipo_control LIKE '%$codigo%' OR descripcion LIKE '%$codigo%') AND status_control = 1";
+         $query_servicio = $mysqli->query($sql_consulta);
+		if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr><th scope="row">
+                <button class="btn waves-effect waves-dark btn-info btn-outline-info btn-icon" onclick="editar(\''.$fila['id_tipo_control'].'\')">
+                    <i class="ti-pencil-alt2" style="padding-left: 4px; padding-top: -3px;">
+                    </i>
+                </button>
+                </th>
+                <td><p style="padding-top: 12px; text-align: center;">'.$fila['id_tipo_control'].'</p></td>
+                <td><p style="padding-top: 12px;">'.$fila['descripcion'].'</p></td></tr>';
+               
+            }
+            
+        }   
+        
+        $html .= '
+            <div class="col-xl-12 col-md-12">
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-xs table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Acción</th>
+                                    <th style="width: 15%;">Código</th>
+                                    <th style="width: 70%;">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            '.$contenido.'
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>';
+
+        return $html;
+    }
+
+    function detalles($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $codigo_seleccionado = '';
+        $descripcion = '';
+
+        $sql_consulta_control = "SELECT * FROM tipo_control WHERE id_tipo_control = '$codigo' AND status_control = 1";
+
+        $query_servicio = $mysqli->query($sql_consulta_control);
+		if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $descripcion = $fila['descripcion'];
+            $codigo_seleccionado = $fila['id_tipo_control'];
+        }
+        
+       
+
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Modificar tipo de control: '.$codigo_seleccionado.'</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$codigo_seleccionado.'" ReadOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción">'.$descripcion.'</textarea>
+                                        </div>
+                                    </div>
+
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_edicion();">Guardar</button>
+                                <button class="btn btn-danger waves-effect waves-light" onclick="eliminar_control();">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    function nuevo($conexion){
+        include $conexion;
+        $sql_consulta = "SELECT id_tipo_control FROM tipo_control  
+        ORDER BY tipo_control.id_tipo_control  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_tipo_control'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+
+        $html = '';
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Nuevo tipo de riesgo</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$id_guardar.'" readOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_nuevo();">Guardar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    
+    function guardar_edicion($codigo, $descripcion, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $sql_gaurdar = "UPDATE tipo_control SET descripcion='$descripcion' WHERE id_tipo_control = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar tipo de riesgo ".$sql_gaurdar;
+		}
+        return $respuesta;
+    }
+
+    function guardar_nuevo($codigo, $descripcion, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $id_actual= '';
+        $sql_consulta = "SELECT id_tipo_control FROM tipo_control  
+        ORDER BY tipo_control.id_tipo_control  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_tipo_control'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+        
+         $sql_gaurdar = "INSERT INTO tipo_control (id_tipo_control, descripcion, status_control)
+        VALUES ('$id_guardar', '$descripcion', 1)";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar tipo de riesgo ".$sql_gaurdar;
+		} 
+        return $respuesta;
+    }
+
+    function eliminar_control($codigo, $conexion){
+        include $conexion;
+        $respuesta = 0;
+        $sql_gaurdar = "UPDATE tipo_control SET status_control = 0 WHERE id_tipo_control = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al eliminar ".$sql_gaurdar;
+		}
+    }
+
+
+}
+
+class giros{
+
+    function obtener_datos($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $contenido = '';
+        $descripcion = '';
+        $sql_consulta = "SELECT * FROM giros WHERE (id_giro LIKE '%$codigo%' OR nombre LIKE '%$codigo%') AND status_giro = 1";
+         $query_servicio = $mysqli->query($sql_consulta);
+		if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr><th scope="row">
+                <button class="btn waves-effect waves-dark btn-info btn-outline-info btn-icon" onclick="editar(\''.$fila['id_giro'].'\')">
+                    <i class="ti-pencil-alt2" style="padding-left: 4px; padding-top: -3px;">
+                    </i>
+                </button>
+                </th>
+                <td><p style="padding-top: 12px;">'.$fila['nombre'].'</p></td></tr>';
+               
+            }
+            
+        }   
+        
+        $html .= '
+            <div class="col-xl-12 col-md-12">
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-xs table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Acción</th>
+                                    <th style="width: 70%;">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            '.$contenido.'
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>';
+
+        return $html;
+    }
+
+    function detalles($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $codigo_seleccionado = '';
+        $descripcion = '';
+        $contenido = '';
+        $entidades = '';
+        $sql_consulta_control = "SELECT * FROM giros WHERE id_giro = '$codigo' AND status_giro = 1";
+
+        $query_servicio = $mysqli->query($sql_consulta_control);
+		if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $descripcion = $fila['nombre'];
+            $codigo_seleccionado = $fila['id_giro'];
+        }
+
+        $sql_consulta = "SELECT ent.id_entidad, ent.descripcion, gix.id_giro FROM entidad AS ent 
+        LEFT JOIN giros_x_entidad AS gix ON gix.id_entidad = ent.id_entidad AND gix.id_giro = {$fila['id_giro']}
+        WHERE  ent.status_entidad = 1 ORDER BY ent.id_entidad";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr>
+                <td><p style="padding-top: 12px; text-align: center;">'.$fila['id_entidad'].'</p></td>
+                <td><p style="padding-top: 12px;">'.$fila['descripcion'].'</p></td>
+                <td>
+                    <p style="padding-top: 12px; text-align: center;">';
+                    if($fila['id_giro'] != null){
+                        $entidades .= ','.$fila['id_entidad'];
+                        $contenido .= '<input type="checkbox" value="" id="ligado_'.$fila['id_entidad'].'" name="ligado_'.$fila['id_entidad'].'" onchange="check_control(\''.$fila['id_entidad'].'\');" checked>';
+                    }else{
+                        $contenido .= '<input type="checkbox" value="" id="ligado_'.$fila['id_entidad'].'" name="ligado_'.$fila['id_entidad'].'" onchange="check_control(\''.$fila['id_entidad'].'\');">';
+                    }
+                    $contenido .= '</p>
+                </td>
+                </tr>';
+            }
+        }   
+       
+
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Modificar giro: '.$descripcion.'</label></br></br>
+                                <form class="">
+                                   
+                                            <input type="hidden" id="codigo_form" name="codigo_form" class="form-control" value="'.$codigo_seleccionado.'" ReadOnly>
+                                            <input type="hidden" id="id_a_ligar" name="id_a_ligar" class="form-control" value="'.$entidades.'">
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Nombre</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe un nombre">'.$descripcion.'</textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Ligar por entidad</label>
+                                        <div class="col-sm-10">
+                                            <table class="table table-xs table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 15%;">Código</th>
+                                                        <th style="width: 70%;">Descripción</th>
+                                                        <th style="width: 15%;">Ligado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                '.$contenido.'
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_edicion();">Guardar</button>
+                                <button class="btn btn-danger waves-effect waves-light" onclick="eliminar_control();">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    function nuevo($conexion){
+        include $conexion;
+        $contenido = '';
+
+        $sql_consulta = "SELECT id_giro FROM giros  
+        ORDER BY giros.id_giro  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_giro'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+
+        $sql_consulta = "SELECT * FROM entidad WHERE  status_entidad = 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr>
+                <td><p style="padding-top: 12px; text-align: center;">'.$fila['id_entidad'].'</p></td>
+                <td><p style="padding-top: 12px;">'.$fila['descripcion'].'</p></td>
+                <td>
+                    <p style="padding-top: 12px; text-align: center;">
+                        <input type="checkbox" value="" id="ligado_'.$fila['id_entidad'].'" name="ligado_'.$fila['id_entidad'].'" onchange="check_control(\''.$fila['id_entidad'].'\');">
+                    </p>
+                </td>
+                </tr>';
+                
+            }
+            
+        }   
+       
+       
+
+        $html = '';
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Nuevo giro</label></br></br>
+                                <form class="">
+                                       
+                                            <input type="hidden" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$id_guardar.'" readOnly>
+                                            <input type="hidden" id="id_a_ligar" name="id_a_ligar" class="form-control" placeholder="" value="">
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Nombre</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe un nombre"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Ligar por entidad</label>
+                                        <div class="col-sm-10">
+                                            <table class="table table-xs table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 15%;">Código</th>
+                                                        <th style="width: 70%;">Descripción</th>
+                                                        <th style="width: 15%;">Ligado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                '.$contenido.'
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_nuevo();">Guardar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    
+    function guardar_edicion($codigo, $descripcion, $arreglo_ent, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $sql_gaurdar = "UPDATE giros SET nombre='$descripcion' WHERE id_giro = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar giro ".$sql_gaurdar;
+		}
+
+        $query_eliminar_entidad = "DELETE FROM giros_x_entidad WHERE id_giro = '$codigo'";
+        if ($mysqli->query($query_eliminar_entidad) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar entidades ".$sql_gaurdar;
+		}
+
+        $ids_entidad = explode(",", $arreglo_ent);
+        foreach($ids_entidad as $usr) {
+            if($usr != ''){
+                $query_entidad_giro = "INSERT INTO giros_x_entidad (id_giro, id_entidad, status_conexion) VALUES ('{$codigo}','{$usr}',1);";
+                if ($mysqli->query($query_entidad_giro) === TRUE) {
+                    $respuesta = 1; 
+                }else {
+                    $respuesta =  "Error: Error al ligar giro y entidad ".$query_entidad_giro;
+                }  
+            }
+        }
+        
+        return $respuesta;
+    }
+
+    function guardar_nuevo($codigo, $descripcion, $arreglo_ent, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $id_giro = '';
+         $sql_gaurdar = "INSERT INTO giros (nombre, status_giro)
+        VALUES ('$descripcion', 1)";
+         if ($mysqli->query($sql_gaurdar) === TRUE) {
+            $id_giro = $mysqli->insert_id;
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al guardar giro ".$sql_gaurdar;
+		}  
+
+        $query_entidad_giro = "";
+        $ids_entidad = explode(",", $arreglo_ent);
+        foreach($ids_entidad as $usr) {
+            if($usr != ''){
+                $query_entidad_giro = "INSERT INTO giros_x_entidad (id_giro, id_entidad, status_conexion) VALUES ('{$id_giro}','{$usr}',1);";
+                if ($mysqli->query($query_entidad_giro) === TRUE) {
+                    $respuesta = 1; 
+                }else {
+                    $respuesta =  "Error: Error al ligar giro y entidad ".$query_entidad_giro;
+                }  
+            }
+        }
+
+        return $respuesta;
+    }
+
+    function eliminar_control($codigo, $conexion){
+        include $conexion;
+        $respuesta = 0;
+        $sql_gaurdar = "UPDATE giros SET status_giro = 0 WHERE id_giro = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al eliminar ".$sql_gaurdar;
+		}
+    }
+
+
+}
+
 ?>

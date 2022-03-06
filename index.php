@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-//ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT'].'/tmp')));
-//ini_set('session.gc_probability', 1);
+/*  ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT'].'/tmp')));
+ini_set('session.gc_probability', 1); */
 if(isset($_GET['c'])){
     try {
-        session_start();
-        session_unset();
-        session_destroy();
-        $_SESSION['username'] = "";
+
+        if (isset($_COOKIE['hdrtydfnghfjdfgh'])) {
+            unset($_COOKIE['hdrtydfnghfjdfgh']); 
+            setcookie('hdrtydfnghfjdfgh', null, -1, '/'); 
+            //return true;
+        } else {
+            //return false;
+        }
+
+        if (isset($_COOKIE['ergdfsggvbvc'])) {
+            unset($_COOKIE['ergdfsggvbvc']); 
+            setcookie('ergdfsggvbvc', null, -1, '/'); 
+            //return true;
+        } else {
+            //return false;
+        }
 
     } catch (\Throwable $th) {
         echo $th;
     }
 }else{
-    session_start();
-    if(isset($_SESSION['username'])){
+    //session_start();
+    if(isset($_COOKIE['hdrtydfnghfjdfgh'])){
         require 'conexion.php';
         echo '<script type="text/javascript">';
         echo 'window.location.href="'.$CFG->wwwroot.'/views/loggin/inicio.php?m=01&o=0";';
@@ -24,7 +36,7 @@ if(isset($_GET['c'])){
         echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'/views/loggin/inicio.php?m=0&o=0" />';
         echo '</noscript>';
     }
-}
+} 
 
 ?>
 

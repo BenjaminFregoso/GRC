@@ -16465,3 +16465,11 @@ body.dark {
   bottom: 50px;
   opacity: 1;
 }
+
+.input-centrado{
+  text-align: center; 
+}
+
+.td-proceso{
+  padding-top: 0.7rem !important;
+}

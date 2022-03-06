@@ -2,26 +2,37 @@
 require 'conexion.php';
 //ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT'].'/tmp')));
 //ini_set('session.gc_probability', 1);
-session_start();
+//session_start();
 $usuario = $_POST['username'];
 $clave = $_POST['password'];
 $clave = md5($clave);
 
 try {
     $q = "SELECT COUNT(*) as contar FROM usuarios where usuario = '$usuario' and password = '$clave' and status_usuario = 1";
-    echo $q;
+    //echo $q;
     $consultaBD=$mysqli->query($q);
     $array = mysqli_fetch_array($consultaBD);
+ 
 
-if($array['contar']>0){
-    $_SESSION['username']=$usuario;
+if($array['contar'] != '0'){
+    //echo "entra";
+    //$_SESSION['username']=$usuario;
 
-
-    $sql = "SELECT * FROM usuarios where usuario = '$usuario' ";
+    $sql = "SELECT * FROM usuarios where usuario = '$usuario' AND status_usuario = 1 ";
     $consultaBD=$mysqli->query($sql);
     $currenUser = mysqli_fetch_array($consultaBD);
-    $_SESSION['id']=$currenUser['id'];
+    //$_SESSION['id']=$currenUser['id'];
     
+    $nombre = 'hdrtydfnghfjdfgh';
+    $valor = $currenUser['id'];
+    try {
+        //setcookie($nombre, $valor, $expiracion, $ruta, $dominio, $seguridad, $solohttp);
+        setcookie($nombre, $valor);
+        //echo "Cookie establecida";
+    } catch (\Throwable $th) {
+       echo "Error al establecer la sesión";
+    }
+
     if (!headers_sent()) {
         header('Location: '.$CFG->wwwroot.'/empresa.php?m=0&o=0');
         exit;
