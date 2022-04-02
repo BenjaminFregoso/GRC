@@ -17,7 +17,7 @@ $( document ).ready(function() {
      //console.log(params);
       $.ajax({
         data:  params,
-        url:  '/views/evaluacion/classes/lib_evaluacion.php',
+        url:  '/views/evaluacion/classes/lib_seguimiento.php',
         type:  'post',
         success: function(response) {
           //console.log(response);
@@ -54,7 +54,7 @@ $( document ).ready(function() {
    //console.log(params);
     $.ajax({
       data:  params,
-      url:  '/views/evaluacion/classes/lib_evaluacion.php',
+      url:  '/views/evaluacion/classes/lib_seguimiento.php',
       type:  'post',
       success: function(response) {
         //console.log(response);
@@ -86,7 +86,7 @@ $( document ).ready(function() {
    //console.log(params);
     $.ajax({
       data:  params,
-      url:  '/views/evaluacion/classes/lib_evaluacion.php',
+      url:  '/views/evaluacion/classes/lib_seguimiento.php',
       type:  'post',
       success: function(response) {
         //console.log(response);
@@ -116,7 +116,7 @@ $( document ).ready(function() {
    //console.log(params);
     $.ajax({
       data:  params,
-      url:  '/views/evaluacion/classes/lib_evaluacion.php',
+      url:  '/views/evaluacion/classes/lib_seguimiento.php',
       type:  'post',
       success: function(response) {
         //console.log(response);
@@ -202,7 +202,7 @@ $( document ).ready(function() {
    //console.log(params);
     $.ajax({
       data:  params,
-      url:  '/views/evaluacion/classes/lib_evaluacion.php',
+      url:  '/views/evaluacion/classes/lib_seguimiento.php',
       type:  'post',
       success: function(response) {
         //console.log(response);

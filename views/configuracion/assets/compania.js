@@ -110,11 +110,13 @@ function guardar_edicion(){
 function guardar_nuevo(){
   var nombre_form= $("#nombre_form").val();
   var giro_form= $("#select_giro").val();
+  var madurez = $("#select_madurez").val();
 
   var params = {
     "method" : "guardar_nuevo",
     "nombre_form" : nombre_form,
     "giro" : giro_form,
+    "madurez": madurez,
     "incluir" : "../../../conexion.php",
   };
  //console.log(params);
@@ -124,7 +126,7 @@ function guardar_nuevo(){
     type:  'post',
     success: function(response) {
       //alert(response);
-      //location.reload();
+      location.reload();
     },
     error: function(response) {
       alert('Algo anda mal!!! en el search');

@@ -1,11 +1,38 @@
+<?php
+require_once('../../header.php'); 
 
-<?php include '../../header.php'; ?>
+
+
+$lib = new datos_global();
+//Nombre empresa
+$id_empresa = $lib->get_global_empresa();
+$nombre_usuario = $lib->get_global_usuario();
+$empresa_sess='';
+  $sql = "SELECT * FROM cliente where id = $id_empresa AND status_empresa = 1 ";
+    if($consultaBD=$mysqli->query($sql)){
+        $fila = mysqli_fetch_array($consultaBD);
+        $empresa_sess .= $fila['nombre'];
+    } 
+
+
+ require_once('classes/lib.php'); 
+$evaluac = new evaluacion();
+$tabla = $evaluac->mostrar_tabla($id_empresa, '', '','','','','', "../../conexion.php"); 
+$version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
+$entidad = $evaluac->mostrar_entidades("../../conexion.php");  
+$proceso = $evaluac->mostrar_proceso("../../conexion.php");  
+$riesgo = $evaluac->mostrar_riesgo("../../conexion.php");  
+$control = $evaluac->mostrar_control("../../conexion.php");  
+?>
+
+
 <style>
     table, td, th{
     border-bottom: 1px solid #ddd;
     border: 1px solid #ddd;
 }
     </style>
+    <input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $id_empresa;?>">
                     <div class="pcoded-content">
                       <!-- Page-header start -->
                       <div class="page-header">
@@ -13,8 +40,8 @@
                               <div class="row align-items-center">
                                   <div class="col-md-8">
                                       <div class="page-header-title">
-                                          <h5 class="m-b-10">EMPRESA NOMBRE</h5>
-                                          <p class="m-b-0">Captura de seguimiento</p>
+                                          <h5 class="m-b-10"><?php echo $empresa_sess;?></h5>
+                                          <p class="m-b-0">Captura de evaluación</p>
                                       </div>
                                   </div>
                                   <div class="col-md-4">
@@ -22,7 +49,7 @@
                                           <li class="breadcrumb-item">
                                               <a href="index.html"> <i class="fa fa-home"></i> </a>
                                           </li>
-                                          <li class="breadcrumb-item"><a href="#!">Seguimiento a plan de acción</a>
+                                          <li class="breadcrumb-item"><a href="#!">Evaluación</a>
                                           </li>
                                       </ul>
                                   </div>
@@ -44,15 +71,11 @@
                                             <div class="col-xl-12 col-md-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Seguimiento</h5>
-                                                        <span class="text-muted">Seguimiento a plan de acción</span>
+                                                        <h5>Seguimiento al plan de acción</h5>
+                                                        <span class="text-muted">Captura de seguimiento</span>
                                                         <div class="card-header-right">
                                                             <ul class="list-unstyled card-option">
-                                                                <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                                <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                                <li><i class="fa fa-minus minimize-card"></i></li>
-                                                                <li><i class="fa fa-refresh reload-card"></i></li>
-                                                                <li><i class="fa fa-trash close-card"></i></li>
+                                                                <i class="fa fa-window-maximize full-card"></i>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -62,108 +85,52 @@
                                                             <div class="col-xl-2 col-md-12">
                                                                 <label>Versión:</label>
                                                                 </br>
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
+                                                                <?php echo $version; ?>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Entidad:</label>
+                                                            <div class="col-xl-2 col-md-12">
+                                                            <label>&nbsp;Entidad:</label>
+                                                                </br>
+                                                                <?php echo $entidad; ?>
+                                                            </div>
+
+                                                            <div class="col-xl-2 col-md-12">
+                                                           <label>&nbsp;Proceso:</label>
                                                                 </br>
                                                                 
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
+                                                                <?php echo $proceso;?>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Proceso:</label>
+                                                            <div class="col-xl-2 col-md-12">
+                                                                <label>Estatus:</label>
                                                                 </br>
-                                                                
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-xl-5 col-md-12">
-                                                            <label>Estatus:</label>
-                                                                </br>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="completado_btn" name="completado_btn">Completado</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="desarrollo_btn" name="desarrollo_btn">Desarrollo</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="nulo_btn" name="nulo_btn">Nulo</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="todos_btn" name="todos_btn">Todos</button>
-                                                            </div>
-
-                                                            <div class="col-xl-1 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Tipo de riesgo:</label>
-                                                                </br>
-                                                                
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
+                                                                <select id="select_status" name="select_status" class="form-control textos " onChange="filtro();">
+                                                                    <option value="">Selecciona una opción</option>
+                                                                    <option value="Completado">Completado</option>
+                                                                    <option value="Desarrollo">Desarrollo</option>
+                                                                    <option value="Nulo">Nulo</option>
+                                                                    <option value="Todos">Todos</option>
                                                                 </select>
                                                             </div>
 
                                                             <div class="col-xl-2 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Tipo de control:</label>
+                                                                <label>&nbsp;Tipo de riesgo:</label>
+                                                                </br>
+                                                                <?php echo $riesgo; ?>
+                                                            </div>
+
+                                                            <div class="col-xl-2 col-md-12">
+                                                                <label>&nbsp;Tipo de control:</label>
                                                                 </br>
                                                                 
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
+                                                                <?php echo $control; ?>
                                                             </div>
                                                         </div>
 
-                                                        <div class="row">
-                                                            <div class="col-xl-12 col-md-12">
-</br>
-                                                                <div class="card-block table-border-style">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table table-xs table-hover">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Entidad</th>
-                                                                                    <th>Proceso</th>
-                                                                                    <th>Tipo de riesgo</th>
-                                                                                    <th>Tipo de control</th>
-                                                                                    <th>Objetivos de control</th>
-                                                                                    <th>Avance</th>
-                                                                                    <th>Responsable</th>
-                                                                                    <th>Fecha compromiso</th>
-                                                                                    <th>Observaciones</th>
-                                                                                    <th>Estatus</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                        <div class="row" id="tabla_principal" name="tabla_principal">
+                                                       <?php echo $tabla;?>
                                                         </div>
 
-                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -176,3 +143,4 @@
                                 <div id="styleSelector"> </div>
                             </div>
                        <?php include '../../footer.php'; ?>
+                       <script type="text/javascript" src="assets/seguimiento.js"></script>

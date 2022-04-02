@@ -17,8 +17,12 @@ $empresa_sess='';
 
  require_once('classes/lib.php'); 
 $evaluac = new evaluacion();
-$tabla = $evaluac->mostrar_tabla($id_empresa, '', "../../conexion.php"); 
-$version = $evaluac->mostrar_version($id_empresa, "../../conexion.php"); 
+$tabla = $evaluac->mostrar_tabla($id_empresa, '', '','','','','', "../../conexion.php"); 
+$version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
+$entidad = $evaluac->mostrar_entidades("../../conexion.php");  
+$proceso = $evaluac->mostrar_proceso("../../conexion.php");  
+$riesgo = $evaluac->mostrar_riesgo("../../conexion.php");  
+$control = $evaluac->mostrar_control("../../conexion.php");  
 ?>
 
 
@@ -71,76 +75,56 @@ $version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
                                                         <span class="text-muted">Captura de evaluación</span>
                                                         <div class="card-header-right">
                                                             <ul class="list-unstyled card-option">
-                                                                <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                                <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                                <li><i class="fa fa-minus minimize-card"></i></li>
-                                                                <li><i class="fa fa-refresh reload-card"></i></li>
-                                                                <li><i class="fa fa-trash close-card"></i></li>
+                                                                <i class="fa fa-window-maximize full-card"></i>
                                                             </ul>
                                                         </div>
                                                     </div>
                                                     <div class="card-block">
                                                         <!--info dentro-->
                                                         <div class="row">
-                                                            <div class="col-xl-1 col-md-12">
+                                                            <div class="col-xl-2 col-md-12">
                                                                 <label>Versión:</label>
                                                                 </br>
                                                                 <?php echo $version; ?>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Entidad:</label>
+                                                            <div class="col-xl-2 col-md-12">
+                                                            <label>&nbsp;Entidad:</label>
+                                                                </br>
+                                                                <?php echo $entidad; ?>
+                                                            </div>
+
+                                                            <div class="col-xl-2 col-md-12">
+                                                           <label>&nbsp;Proceso:</label>
                                                                 </br>
                                                                 
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
+                                                                <?php echo $proceso;?>
+                                                            </div>
+
+                                                            <div class="col-xl-2 col-md-12">
+                                                                <label>Estatus:</label>
+                                                                </br>
+                                                                <select id="select_status" name="select_status" class="form-control textos " onChange="filtro();">
+                                                                    <option value="">Selecciona una opción</option>
+                                                                    <option value="Completado">Completado</option>
+                                                                    <option value="Desarrollo">Desarrollo</option>
+                                                                    <option value="Nulo">Nulo</option>
+                                                                    <option value="Sin control">Sin control</option>
+                                                                    <option value="No aplica">No aplica</option>
                                                                 </select>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Proceso:</label>
+                                                            <div class="col-xl-2 col-md-12">
+                                                                <label>&nbsp;Tipo de riesgo:</label>
                                                                 </br>
-                                                                
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
+                                                                <?php echo $riesgo; ?>
                                                             </div>
 
-                                                            <div class="col-xl-7 col-md-12">
-                                                            <label>Estatus:</label>
-                                                                </br>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="completado_btn" name="completado_btn">Completado</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="desarrollo_btn" name="desarrollo_btn">Desarrollo</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="sin_control_btn" name="sin_control_btn">Sin control</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="no_aplica_btn" name="no_aplica_btn">No aplica</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="nulo_btn" name="nulo_btn">Nulo</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="todos_btn" name="todos_btn">Todos</button>
-                                                            </div>
-
-                                                            <div class="col-xl-1 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Tipo de riesgo:</label>
+                                                            <div class="col-xl-2 col-md-12">
+                                                                <label>&nbsp;Tipo de control:</label>
                                                                 </br>
                                                                 
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-xl-1 col-md-12">
-                                                            <input type="checkbox" value=""><label>&nbsp;Tipo de control:</label>
-                                                                </br>
-                                                                
-                                                                <select id="select_version" name="select_version" class="form-control textos remove_disabled" required>
-                                                                    <option value="0">Selecciona una opción</option>
-                                                                    <option value="0">Pruebas 1</option>
-                                                                    <option value="0">Pruebas 2</option>
-                                                                </select>
+                                                                <?php echo $control; ?>
                                                             </div>
                                                         </div>
 
@@ -148,125 +132,6 @@ $version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
                                                        <?php echo $tabla;?>
                                                         </div>
 
-                                                        <div class="row">
-                                                            
-                                                            <div class="col-xl-2 col-md-12 " style="text-align: center;">
-                                                                <div class="card-block table-border-style">
-                                                                <div class="table-responsive">
-                                                                <table class="table table-xs table-hover" >
-                                                                    <thead >
-                                                                        <tr>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Nivel de riesgo</span>
-                                                                            </th>
-                                                                            <tr>
-                                                                            </tr>
-                                                                            <th class="bg-danger" style="text-align: center;">
-                                                                                <span id="nivel_riesgo">33.33%</span>
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                                </div></div>
-                                                                
-                                                            </div>
-
-                                                            <div class="col-xl-6 col-md-12 " style="text-align: center;">
-                                                                
-                                                                <div class="card-block table-border-style">
-                                                                <div class="table-responsive">
-                                                                <table class="table table-xs table-hover" >
-                                                                    <thead >
-                                                                        <tr>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Cuantitativo</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Evaluados</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Completados</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>En desarrollo</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Sin control</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>No aplica</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Nulo</span>
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <tr>
-                                                                            <td style="text-align: center;">
-                                                                                <span>55.55%</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>23</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>43</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>54</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>6</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>23</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>99</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                                </div></div>
-                                                                
-                                                            </div>
-                                                            
-                                                            <div class="col-xl-4 col-md-12 " style="text-align: center;">
-                                                                
-                                                                <div class="card-block table-border-style">
-                                                                <div class="table-responsive">
-                                                                <table class="table table-xs table-hover" >
-                                                                    <thead >
-                                                                        <tr>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Puntos requeridos</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>Puntos obtenidos</span>
-                                                                            </th>
-                                                                            <th style="text-align: center;">
-                                                                                <span>% Cualitativo</span>
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td style="text-align: center;">
-                                                                                <span>3500</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>2130</span>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-                                                                                <span>62.62%</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                                </div></div>
-                                                                
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

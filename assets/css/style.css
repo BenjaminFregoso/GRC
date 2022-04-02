@@ -4863,6 +4863,23 @@ select.form-control:not([size]):not([multiple]) {
 .m-r-50 {
   margin-right: 50px; }
 
+.letra_pequena{
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  font: 10px Arial, sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.letra_pequena_head{
+  
+  text-align: center;
+  font: 12px Arial, sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 /*====== Margin-right css ends ======*/
 /*====== Display css starts ======*/
 .d-none {

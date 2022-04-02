@@ -500,12 +500,23 @@ class companias{
         include $conexion;
         $html = '';
         $giro_option = '';
+        $madurez_option = '';
         $sql_consulta_giro = "SELECT * FROM giros WHERE status_giro = 1";
         $query_servicio = $mysqli->query($sql_consulta_giro);
 		if($query_servicio->num_rows>=1){
             while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
               
                     $giro_option .= '<option value="'.$fila['id_giro'].'">'.$fila['nombre'].'</option>';
+                
+            }
+        }
+
+        $sql_consulta_madurez = "SELECT * FROM nivel_madurez WHERE status_madurez = 1";
+        $query_servicio = $mysqli->query($sql_consulta_madurez);
+		if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+              
+                    $madurez_option .= '<option value="'.$fila['id'].'">'.$fila['descripcion'].'</option>';
                 
             }
         }
@@ -526,10 +537,18 @@ class companias{
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Giro</label>
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-4">
                                         <select name="select_giro" id="select_giro" class="form-control">
                                             <option value="0">Selecciona una opción</option>
                                             '.$giro_option.'
+                                        </select>
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label">Nivel de madurez</label>
+                                        <div class="col-sm-4">
+                                        <select name="select_madurez" id="select_madurez" class="form-control">
+                                            <option value="0">Selecciona una opción</option>
+                                            '.$madurez_option.'
                                         </select>
                                         </div>
                                     </div>
@@ -567,7 +586,7 @@ class companias{
         return $respuesta;
     }
 
-    function guardar_nuevo($nombre, $giro, $conexion){
+    function guardar_nuevo($nombre, $giro, $madurez, $conexion){
 
         date_default_timezone_set('America/Mexico_City');
         $hoy = new DateTime();
@@ -576,8 +595,8 @@ class companias{
         include $conexion;
         $respuesta = 0;
         
-         $sql_gaurdar = "INSERT INTO cliente (nombre, id_giro, status_empresa, datecreated, datemodified) 
-         VALUES('{$nombre}','{$giro}', 1,'{$hoy_u}', '{$hoy_u}')";
+         $sql_gaurdar = "INSERT INTO cliente (nombre, id_giro, id_madurez, status_empresa, datecreated, datemodified) 
+         VALUES('{$nombre}',{$giro},{$madurez}, 1,'{$hoy_u}', '{$hoy_u}')";
         if ($mysqli->query($sql_gaurdar) === TRUE) {
 			$respuesta = 1; 
             $id_cliente = $mysqli->insert_id;
@@ -591,17 +610,29 @@ class companias{
          $query_servicio = $mysqli->query($sql_select_entidades);
         if($query_servicio->num_rows>=1){
             while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
-              
+              if($fila['id_control'] != ''){
                 $sql_gaurdar = "INSERT INTO control_cliente (id_control, id_cliente, status_conexion, version, version_descripcion) 
                 VALUES('{$fila['id_control']}','{$id_cliente}', 1, 1, 'VERSIÓN 1')";
 
                 if ($mysqli->query($sql_gaurdar) === TRUE) {
                    // echo "Control ligado con exito";
                    $respuesta = 1; 
+
+                    //Crear plan de acción
+                    $id_control = $mysqli->insert_id;
+                    $sql_gaurdar = "INSERT INTO cliente_diagnostico (id_version_diag, descripcion_version, id_control_cliente) 
+                    VALUES(1, 'VERSIÓN 1' ,'{$id_control}')";
+                    if ($mysqli->query($sql_gaurdar) === TRUE) {
+                        //Seguir
+                    }else{
+                        //Parar 
+                        echo "No se creó la plantilla de plan de acción";
+                    }
+
                 }else{
                     echo "No ligaron los objetivos de control";
                 }
-                
+              }
             }
         }
         

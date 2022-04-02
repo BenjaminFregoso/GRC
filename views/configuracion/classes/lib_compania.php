@@ -27,6 +27,7 @@ if($method){
       $tableContent = $companias->guardar_nuevo(
       $_POST['nombre_form'],
       $_POST['giro'],
+      $_POST['madurez'],
       $_POST['incluir']);
     echo $tableContent;
     break;

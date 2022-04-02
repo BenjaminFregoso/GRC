@@ -1,45 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+
 <?php
 /*  ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT'].'/tmp')));
 ini_set('session.gc_probability', 1); */
 if(isset($_GET['c'])){
-    try {
+    require 'conexion.php';
+        echo '<script type="text/javascript">';
+        echo 'window.location.href="'.$CFG->wwwroot.'/cerrar.php";';
+        echo '</script>';
+        echo '<noscript>';
+        echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'/cerrar.php" />';
+        echo '</noscript>';
 
-        if (isset($_COOKIE['hdrtydfnghfjdfgh'])) {
-            unset($_COOKIE['hdrtydfnghfjdfgh']); 
-            setcookie('hdrtydfnghfjdfgh', null, -1, '/'); 
-            //return true;
-        } else {
-            //return false;
-        }
-
-        if (isset($_COOKIE['ergdfsggvbvc'])) {
-            unset($_COOKIE['ergdfsggvbvc']); 
-            setcookie('ergdfsggvbvc', null, -1, '/'); 
-            //return true;
-        } else {
-            //return false;
-        }
-
-    } catch (\Throwable $th) {
-        echo $th;
-    }
 }else{
     //session_start();
     if(isset($_COOKIE['hdrtydfnghfjdfgh'])){
         require 'conexion.php';
         echo '<script type="text/javascript">';
-        echo 'window.location.href="'.$CFG->wwwroot.'/views/loggin/inicio.php?m=01&o=0";';
+        echo 'window.location.href="'.$CFG->wwwroot.'/inicio.php?m=01&o=0";';
         echo '</script>';
         echo '<noscript>';
-        echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'/views/loggin/inicio.php?m=0&o=0" />';
+        echo '<meta http-equiv="refresh" content="0;url='.$CFG->wwwroot.'/inicio.php?m=01&o=0" />';
         echo '</noscript>';
     }
 } 
 
 ?>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>GRC | Sistema de auditoria</title>
     <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->

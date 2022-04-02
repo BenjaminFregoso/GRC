@@ -195,25 +195,7 @@ class evaluacion{
                     $color = "background-color: LightGray;";
                     $disabled = "disabled";
                 }
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_ejecutado_'.$fila['id'].'" name="dato_ejecutado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-                if($fila['monitoreado'] == 1){
-                    if($fila['dato_monitoreado'] == '0'){
-                        $checked = "";
-                    }else{
-                        $checked = "checked";
-                    }
-                    $disabled = "";
-                    $color="";
-                }else{
-                    $color = "background-color: LightGray;";
-                    $disabled = "disabled";
-                }
-                $contenido .= '<td class="letra_pequena_head" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_monitoreado_'.$fila['id'].'" name="dato_monitoreado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-
-                $contenido .= '<td class="letra_pequena" style="text-align: center;"><span id="total_puntos_'.$fila['id'].'" name="total_puntos_'.$fila['id'].'">'.$fila['total_puntos'].'</span></td>';
-                
-                $contenido .= '<td class="letra_pequena" style="text-align: center;"><span id="estatus_evaluacion_'.$fila['id'].'" name="estatus_evaluacion_'.$fila['id'].'">'.$fila['estatus_evaluacion'].'</span></td>
-            </tr>';
+                $contenido .= ' </tr>';
                
             }
             
@@ -246,15 +228,11 @@ class evaluacion{
                                 <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tipo de riesgo">Tipo de</br>riesgo</th>
                                 <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tipo de control">Tipo de control</th>
                                 <th class="letra_pequena_head" style="width:15%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Objetivos de control">Objetivos de control</th>
-                                <th class="letra_pequena_head" style="width:5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="No aplica">No aplica</th>
-                                <th class="letra_pequena_head table-active" style="width:5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sin control">Sin</br>control</th>
-                                <th class="letra_pequena_head" style="width:6%; background-color: OrangeRed;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Documentado  ('.$documentado_val.')">Documentado</th>
-                                <th class="letra_pequena_head" style="width:5%; background-color: Orange;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Autorizado  ('.$autorizado_val.')">Autorizado</th>
-                                <th class="letra_pequena_head" style="width:5%; background-color: Yellow;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Difundido  ('.$difundido_val.')">Difundido</th>
-                                <th class="letra_pequena_head" style="width:5%; background-color: Chartreuse;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ejecutado  ('.$ejecutado_val.')">Ejecutado</th>
-                                <th class="letra_pequena_head" style="width:5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Monitoreado  ('.$monitoreado_val.')">Monitoreado</th>
-                                <th class="letra_pequena_head" style="width:5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total de puntos">Total de</br>puntos</th>
-                                <th class="letra_pequena_head" style="width:5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Estatus">Estatus</th>
+                                <th class="letra_pequena_head" style="width:5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tipo de control">Avance</th>
+                                <th class="letra_pequena_head" style="width:15%;"data-toggle="tooltip" data-placement="top" title="" data-original-title="Tipo de control">Responsable</th>
+                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tipo de control">Fecha_compromiso</th>
+                                <th class="letra_pequena_head" style="width:15%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tipo de control">Observaciones</th>
+                                <th class="letra_pequena_head" style="width:5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tipo de control">Estatus</th>
                             </tr>
                         </thead>
                         <tbody>
