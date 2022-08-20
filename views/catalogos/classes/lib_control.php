@@ -12,6 +12,8 @@ $tipo_control = new tipo_control();
 
 $giros = new giros();
 
+$madurez = new nivel_madurez();
+
 if(isset($_POST['method']))
 	$method =  $_POST['method'];
 
@@ -174,6 +176,15 @@ if($method){
   break;
   case "nuevo_g":
   $tableContent = $giros->nuevo($_POST['incluir']);
+  echo $tableContent;
+  break;
+
+  case "detalles_ma":
+    $tableContent = $madurez->detalles($_POST['codigo'], $_POST['incluir']);
+  echo $tableContent;
+  break;
+  case "guardar_edicion_ma":
+    $tableContent = $madurez->guardar_edicion($_POST['codigo'], $_POST['descripcion'], $_POST['sin_control'], $_POST['documentado'], $_POST['autorizado'], $_POST['difundido'], $_POST['ejecutado'], $_POST['monitoreado'], $_POST['completado'], $_POST['desarrollo'], $_POST['incluir']); 
   echo $tableContent;
   break;
   }

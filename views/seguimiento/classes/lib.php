@@ -14,7 +14,7 @@ class evaluacion{
         $nulos = 0;
         $p_requeridos = 0;
         $p_obtenidos = 0;
-
+        date_default_timezone_set('America/Mexico_City');
         include $conexion;
         if($id_version == ''){
             $sql_version = "SELECT version, version_descripcion FROM control_cliente WHERE status_conexion = 1 AND id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC LIMIT 1";
@@ -68,13 +68,19 @@ class evaluacion{
             $filtros .= " AND pro.id_proceso = '{$proceso}' ";
         }
         if($estatus != ''){
-            if($estatus == 'Sin control'){
-                $filtros .= " AND cli.dato_aplica = 1 ";
-            }else if($estatus == 'No aplica'){
-                $filtros .= " AND cli.dato_sin_control = 1 ";
+            if($estatus == 'Nulo'){
+                //Rojo
+                $filtros .= " AND  ( dia.avance = 0 OR dia.avance is null)";
+            }else if($estatus == 'Completado'){
+                //Verde
+                $filtros .= " AND dia.avance >=  $completado_meta ";
             }else{
-                $filtros .= " AND cli.estatus_evaluacion = '{$estatus}' ";
+                //Amarillo
+                $filtros .= " AND dia.avance >= $desarrollo_meta AND dia.avance < $completado_meta ";
             }
+
+                
+            
         }
         if($riesgo != ''){
             $filtros .= " AND tiri.id_tipo_riesgo = '{$riesgo}' ";
@@ -88,14 +94,16 @@ class evaluacion{
         cli.total_puntos, cli.estatus_evaluacion,
         con.id_control, con.descripcion, pro.descripcion AS desc_proceso, ent.descripcion 
         AS desc_entidad, tiri.descripcion AS desc_riesgo, tico.descripcion AS desc_control, con.documentado, 
-        con.autorizado, con.difundido, con.ejecutado, con.monitoreado, con.referencia, con.riesgo, con.status_control 
+        con.autorizado, con.difundido, con.ejecutado, con.monitoreado, con.referencia, con.riesgo, con.status_control,
+        dia.archivo, dia.avance, dia.responsable, dia.fecha_compromiso, dia.observaciones 
         FROM control_cliente AS cli 
         LEFT JOIN control AS con ON cli.id_control = con.id_control
         LEFT JOIN entidad AS ent ON con.id_entidad = ent.id_entidad
         LEFT JOIN proceso AS pro ON pro.id_proceso = con.id_proceso
         LEFT JOIN tipo_riesgo AS tiri ON tiri.id_tipo_riesgo = con.id_tipo_riesgo
         LEFT JOIN tipo_control AS tico ON tico.id_tipo_control = con.id_tipo_control
-        WHERE cli.id_cliente = $id_empresa AND cli.version = $id_version AND cli.status_conexion = 1 $filtros";
+        LEFT JOIN cliente_diagnostico AS dia ON dia.id_control_cliente = cli.id
+        WHERE cli.id_cliente = $id_empresa AND cli.version = $id_version AND dia.id_version_diag = 1 AND cli.status_conexion = 1 $filtros";
          $query_servicio = $mysqli->query($sql_consulta);
          
 		if($query_servicio->num_rows>=1){
@@ -121,81 +129,44 @@ class evaluacion{
                     $p_requeridos++;
                 }
                 
+                if($fila['fecha_compromiso'] != ''){
+                    $fecha = date('Y-m-d', $fila['fecha_compromiso']);
+                }else{
+                    $fecha = '';
+                }
+                
+
                 $contenido .= '<tr id="linea_'.$fila['id'].'" name="linea_'.$fila['id'].'">
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$fila['desc_entidad'].'">'.$fila['desc_entidad'].'</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$fila['desc_proceso'].'">'.$fila['desc_proceso'].'</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$fila['desc_riesgo'].'">'.$fila['desc_riesgo'].'</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$fila['desc_control'].'">'.$fila['desc_control'].'</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$fila['descripcion'].'">'.$fila['descripcion'].'</td>';
-
-                if($fila['dato_aplica'] == '0'){
-                    $checked = "";
-                }else{
-                    $checked = "checked";
-                }
-                $contenido .= '<td class="letra_pequena" style="text-align: center;"><input type="checkbox" value="" id="no_aplica_'.$fila['id'].'" name="no_aplica_'.$fila['id'].'" '. $checked.' onChange="no_aplica('.$fila['id'].');"></td>';
-
-                if($fila['dato_sin_control'] == '0'){
-                    $checked = "";
-                }else{
-                    $checked = "checked";
-                }
-                $contenido .= '<td class="letra_pequena" style="text-align: center;"><input type="checkbox" value="" id="sin_control_'.$fila['id'].'" name="sin_control_'.$fila['id'].'" '. $checked.' onChange="sin_control('.$fila['id'].');"></td>';
-
+                $contenido .= '<td class="letra_pequena_head">
+                <input class="td_input avance" type="text" id="avance_'.$fila['id'].'" name="avance_'.$fila['id'].'" data-id="'.$fila['id'].'" placeholder="0" value="'.$fila['avance'].'">
+                </td>';
+                $contenido .= '<td class="letra_pequena_head">
+                <input class="td_input responsable" type="text" id="responsable_'.$fila['id'].'" name="responsable_'.$fila['id'].'" data-id="'.$fila['id'].'" placeholder="" value="'.$fila['responsable'].'">
+                </td>';
+                $contenido .= '<td class="letra_pequena_head">
+                <input class="td_input fecha_diag" type="date" id="fecha_diag_'.$fila['id'].'" name="fecha_diag_'.$fila['id'].'" data-id="'.$fila['id'].'" placeholder="" value="'.$fecha.'">
+                </td>';
+                $contenido .= '<td class="letra_pequena_head">
+                <input class="td_input observaciones" type="text" id="observaciones_'.$fila['id'].'" name="observaciones_'.$fila['id'].'" placeholder=""  data-id="'.$fila['id'].'" value="'.$fila['observaciones'].'">
+                </td>';
                 
-                if($fila['documentado'] == 1){
-                    if($fila['dato_documentado'] == '0'){
-                        $checked = "";
-                    }else{
-                        $checked = "checked";
-                    }
-                    $disabled = "";
-                    $color="";
+                if($fila['avance'] == 0){
+                    //Rojo
+                    $contenido .= ' <td class="bg-danger"></td>';
+                }else if($fila['avance'] >= $completado_meta){
+                    //Verde
+                    $contenido .= ' <td class="bg-success"></td>';
                 }else{
-                    $color = "background-color: LightGray;";
-                    $disabled = "disabled";
+                    //Amarillo
+                    $contenido .= ' <td class="bg-warning"></td>';
                 }
-                
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_documentado_'.$fila['id'].'" name="dato_documentado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-                if($fila['autorizado'] == 1){
-                    if($fila['dato_autorizado'] == '0'){
-                        $checked = "";
-                    }else{
-                        $checked = "checked";
-                    }
-                    $disabled = "";
-                    $color="";
-                }else{
-                    $color = "background-color: LightGray;";
-                    $disabled = "disabled";
-                }
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_autorizado_'.$fila['id'].'" name="dato_autorizado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-                if($fila['difundido'] == 1){
-                    if($fila['dato_difundido'] == '0'){
-                        $checked = "";
-                    }else{
-                        $checked = "checked";
-                    }
-                    $disabled = "";
-                    $color="";
-                }else{
-                    $color = "background-color: LightGray;";
-                    $disabled = "disabled";
-                }
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_difundido_'.$fila['id'].'" name="dato_difundido_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-                if($fila['ejecutado'] == 1){
-                    if($fila['dato_ejecutado'] == '0'){
-                        $checked = "";
-                    }else{
-                        $checked = "checked";
-                    }
-                    $disabled = "";
-                    $color="";
-                }else{
-                    $color = "background-color: LightGray;";
-                    $disabled = "disabled";
-                }
-                $contenido .= ' </tr>';
+
+                $contenido .= '</tr>';
                
             }
             
@@ -241,140 +212,78 @@ class evaluacion{
                     </table>
                 </div>
             </div>
-        </div>'.$valores.'';
+        </div>'.$valores.'
 
-        $html .= '<div class="col-xl-2 col-md-12 " style="text-align: center;">
-        <div class="card-block table-border-style">
-                <div >
-                    <table style="table-layout:fixed;
-                    width:100%;">
-            <thead >
-                <tr>
-                    <th class="letra_pequena_head" style="text-align: center;" >
-                        <span>Nivel de riesgo</span>
-                    </th>
-                    <tr>
-                    </tr>
-                    <th class="letra_pequena_head bg-danger" style="text-align: center;">
-                        <span id="nivel_riesgo">0.0%</span>
-                    </th>
-                </tr>
-            </thead>
-        </table>
-        </div></div>
+       
         
-    </div>
 
-    <div class="col-xl-6 col-md-12 " style="text-align: center;">
-        
-    <div class="card-block table-border-style">
-    <div >
-        <table style="table-layout:fixed;
-        width:100%;">
-            <thead >
-                <tr>
-                    <th class="letra_pequena_head" style="text-align: center;">
-                        <span>Cuantitativo</span>
-                    </th>
-                    <th class="letra_pequena_head" style="text-align: center;">
-                        <span>Evaluados</span>
-                    </th>
-                    <th class="letra_pequena_head bg-success" style="text-align: center;">
-                        <span>Completados</span>
-                    </th>
-                    <th class="letra_pequena_head bg-warning" style="text-align: center;">
-                        <span>En desarrollo</span>
-                    </th>
-                    <th class="letra_pequena_head bg-danger" style="text-align: center;">
-                        <span>Sin control</span>
-                    </th>
-                    <th class="letra_pequena_head table-active" style="text-align: center;">
-                        <span>No aplica</span>
-                    </th>
-                    <th class="letra_pequena_head" style="text-align: center;">
-                        <span>Nulo</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-            <tr>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.round($cuantitativo,2).'%</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$evaluados.'</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$completado.'</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$desarrollo.'</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$sin_control.'</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$no_aplica.'</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$nulos.'</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        </div></div>
-        
-    </div>
-    
-    <div class="col-xl-4 col-md-12 " style="text-align: center;">
-        
-    <div class="card-block table-border-style">
-    <div >
-        <table style="table-layout:fixed;
-        width:100%;">
-            <thead >
-                <tr>
-                    <th class="letra_pequena_head" style="text-align: center;">
-                        <span>Puntos requeridos</span>
-                    </th>
-                    <th class="letra_pequena_head" style="text-align: center;">
-                        <span>Puntos obtenidos</span>
-                    </th>
-                    <th class="letra_pequena_head" style="text-align: center;">
-                        <span>% Cualitativo</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$p_requeridos.'</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.$p_obtenidos.'</span>
-                    </td>
-                    <td class="letra_pequena_head" style="text-align: center;">
-                        <span>'.round($cualitativo,2).'%</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        </div></div>
-        
     </div>';
         
         return $html;
+    }
+
+    function guarda_avance($id, $avance, $version, $conexion){
+        include $conexion;
+        $sql_update = "UPDATE cliente_diagnostico SET avance = $avance WHERE id_control_cliente = $id AND id_version_diag = $version";
+        
+        
+        if ($mysqli->query($sql_update) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar evaluación ".$sql_update;
+		}
+    }
+
+    function guarda_responsable($id, $responsable, $version, $conexion){
+        include $conexion;
+        $sql_update = "UPDATE cliente_diagnostico SET responsable = '{$responsable}' WHERE id_control_cliente = $id AND id_version_diag = $version";
+        
+        
+        if ($mysqli->query($sql_update) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar evaluación ".$sql_update;
+		}
+    }
+
+    function guarda_observaciones($id, $observaciones, $version, $conexion){
+        include $conexion;
+        $sql_update = "UPDATE cliente_diagnostico SET observaciones = '{$observaciones}' WHERE id_control_cliente = $id AND id_version_diag = $version";
+        
+        if ($mysqli->query($sql_update) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar evaluación ".$sql_update;
+		}
+    }
+    
+    function guarda_fecha($id, $fecha, $version, $conexion){
+        include $conexion;
+        date_default_timezone_set('America/Mexico_City');
+        
+        $hoy = new DateTime($fecha);
+    	$hoy_u = $hoy->getTimestamp();
+        
+        $sql_update = "UPDATE cliente_diagnostico SET fecha_compromiso = '{$hoy_u}' WHERE id_control_cliente = $id AND id_version_diag = $version";
+        
+        
+        if ($mysqli->query($sql_update) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar evaluación ".$sql_update;
+		}
     }
 
     function mostrar_version($id_empresa, $conexion){
         $html = '';
         $contenido='';
         include $conexion;
-        $sql_version = "SELECT version, version_descripcion FROM control_cliente WHERE status_conexion = 1 AND id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC";
+        $sql_version = "SELECT cli.id_version_diag, cli.descripcion_version FROM cliente_diagnostico AS cli 
+        LEFT JOIN control_cliente AS con ON con.id = cli.id_control_cliente WHERE con.id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC";
         $query_serv = $mysqli->query($sql_version);
 		if($query_serv->num_rows>=1){
             while($fila=$query_serv->fetch_array(MYSQLI_ASSOC)){
-                $contenido .= '<option value="'.$fila['version'].'">'.$fila['version_descripcion'].'</option>';
+                $contenido .= '<option value="'.$fila['id_version_diag'].'">'.$fila['descripcion_version'].'</option>';
             }
         }
         $html .= '

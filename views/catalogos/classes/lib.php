@@ -1819,4 +1819,278 @@ class giros{
 
 }
 
+class nivel_madurez{
+    
+
+    function obtener_datos($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $contenido = '';
+        $descripcion = '';
+        $sql_consulta = "SELECT * FROM nivel_madurez WHERE (id_nivel_madurez LIKE '%$codigo%' OR descripcion LIKE '%$codigo%') AND status_madurez = 1";
+         $query_servicio = $mysqli->query($sql_consulta);
+		if($query_servicio->num_rows>=1){
+            while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
+                $contenido .= '<tr><th scope="row">
+                <button class="btn waves-effect waves-dark btn-info btn-outline-info btn-icon" onclick="editar(\''.$fila['id'].'\')">
+                    <i class="ti-pencil-alt2" style="padding-left: 4px; padding-top: -3px;">
+                    </i>
+                </button>
+                </th>
+                <td><p style="padding-top: 12px; text-align: center;">'.$fila['id_nivel_madurez'].'</p></td>
+                <td><p style="padding-top: 12px;">'.$fila['descripcion'].'</p></td></tr>';
+               
+            }
+            
+        }   
+        
+        $html .= '
+            <div class="col-xl-12 col-md-12">
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-xs table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Acción</th>
+                                    <th style="width: 15%;">Nivel</th>
+                                    <th style="width: 70%;">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            '.$contenido.'
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>';
+
+        return $html;
+    }
+
+    function detalles($codigo = null, $conexion){
+        include $conexion;
+        $html = '';
+        $codigo_seleccionado = '';
+        $descripcion = '';
+        $id_nivel_madurez = '';
+
+        $sql_consulta_control = "SELECT * FROM nivel_madurez AS niv LEFT JOIN configuracion AS con ON con.id_madurez = niv.id WHERE niv.id = '$codigo' AND niv.status_madurez = 1";
+
+        $query_servicio = $mysqli->query($sql_consulta_control);
+		if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $descripcion = $fila['descripcion'];
+            $codigo_seleccionado = $fila['id'];
+            $id_nivel_madurez = $fila['id_nivel_madurez'];
+            $sin_control = $fila['sin_control'];
+            $documentado = $fila['documentado'];
+            $autorizado = $fila['autorizado'];
+            $difundido = $fila['difundido'];
+            $ejecutado = $fila['ejecutado'];
+            $monitoreado = $fila['monitoreado'];
+            $completado = $fila['completado'];
+            $desarrollo = $fila['desarrollo'];
+        }
+        
+       
+
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Modificar tipo de riesgo: '.$descripcion.'</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$codigo_seleccionado.'" ReadOnly>
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label">Nivel madurez</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" id="id_nivel_madurez" name="id_nivel_madurez" class="form-control" placeholder="Código" value="'.$id_nivel_madurez.'" ReadOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción" value="'.$descripcion.'">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Sin control</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="sin_control" id="sin_control" name="descripcion_form" placeholder="Sin control" value="'.$sin_control.'">
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">Documentado</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="documentado" name="documentado" placeholder="Documentado" value="'.$documentado.'">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Autorizado</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="sin_control" id="autorizado" name="autorizado" placeholder="Autorizado" value="'.$autorizado.'">
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">Difundido</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="difundido" name="difundido" placeholder="Difundido" value="'.$difundido.'">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Ejecutado</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="sin_control" id="ejecutado" name="ejecutado" placeholder="Ejecutado" value="'.$ejecutado.'">
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">Monitoreado</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="monitoreado" name="monitoreado" placeholder="Monitoreado" value="'.$monitoreado.'">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-12 col-form-label">Configuración:</label>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Completado</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="completado" id="completado" name="ejecutado" placeholder="Completado" value="'.$completado.'">
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">Desarrollo</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="desarrollo" name="desarrollo" placeholder="Desarrollo" value="'.$desarrollo.'">
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_edicion();">Guardar</button>
+                                <button class="btn btn-danger waves-effect waves-light" onclick="eliminar_control();">Eliminar</button>
+                                <button class="btn btn-warning waves-effect waves-light" onclick="location.reload();">Cancelar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    function nuevo($conexion){
+        include $conexion;
+        $sql_consulta = "SELECT id_tipo_riesgo FROM tipo_riesgo  
+        ORDER BY tipo_riesgo.id_tipo_riesgo  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_tipo_riesgo'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+
+        $html = '';
+        $html .= '
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12">
+                            <label>Nuevo tipo de riesgo</label></br></br>
+                                <form class="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Código</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="codigo_form" name="codigo_form" class="form-control" placeholder="Código" value="'.$id_guardar.'" readOnly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Descripción</label>
+                                        <div class="col-sm-10">
+                                            <textarea rows="5" cols="5" class="form-control" id="descripcion_form" name="descripcion_form" placeholder="Escribe una descripción"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                <button class="btn btn-success waves-effect waves-light" onclick="guardar_nuevo();">Guardar</button>
+                            </div>
+                        </div>
+                   
+        ';
+        return $html;
+    }
+
+    
+    function guardar_edicion($codigo, $descripcion, $sin_control, $documentado, $autorizado, $difundido, $ejecutado, $monitoreado, $completado, $desarrollo, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $sql_gaurdar = "UPDATE nivel_madurez SET descripcion='{$descripcion}', sin_control = {$sin_control}, documentado = {$documentado}, autorizado = {$autorizado},
+        difundido = {$difundido},  ejecutado = {$ejecutado}, monitoreado = {$monitoreado} WHERE id = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar tipo de riesgo ".$sql_gaurdar;
+		}
+
+        $sql_gaurdar = "UPDATE configuracion SET completado={$completado}, desarrollo = {$desarrollo} WHERE id_madurez = $codigo";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar tipo de riesgo ".$sql_gaurdar;
+		}
+
+        return $respuesta;
+    }
+
+    function guardar_nuevo($codigo, $descripcion, $conexion){
+        include $conexion;
+        $respuesta = 0; 
+        $id_actual= '';
+        $sql_consulta = "SELECT id_tipo_riesgo FROM tipo_riesgo  
+        ORDER BY tipo_riesgo.id_tipo_riesgo  DESC LIMIT 1";
+        $query_servicio = $mysqli->query($sql_consulta);
+        if($query_servicio->num_rows>=1){
+            $fila=$query_servicio->fetch_array(MYSQLI_ASSOC);
+            $id_actual_str = $fila['id_tipo_riesgo'];
+        }
+        $id_num = substr($id_actual_str, 1); 
+        $id_actual = intval($id_num);
+
+        $id_nuevo = $id_actual+1;
+
+        $id_guardar = str_replace($id_actual, $id_nuevo, $id_actual_str);
+        
+         $sql_gaurdar = "INSERT INTO tipo_riesgo (id_tipo_riesgo, descripcion, status_riesgo)
+        VALUES ('$id_guardar', '$descripcion', 1)";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al actualizar tipo de riesgo ".$sql_gaurdar;
+		} 
+        return $respuesta;
+    }
+
+    function eliminar_control($codigo, $conexion){
+        include $conexion;
+        $respuesta = 0;
+        $sql_gaurdar = "UPDATE tipo_riesgo SET status_riesgo = 0 WHERE id_tipo_riesgo = '$codigo'";
+        if ($mysqli->query($sql_gaurdar) === TRUE) {
+			$respuesta = 1; 
+		}else {
+			$respuesta =  "Error: Error al eliminar ".$sql_gaurdar;
+		}
+    }
+}
+
 ?>

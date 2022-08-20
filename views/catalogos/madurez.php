@@ -1,6 +1,6 @@
-<?php
-require_once('../../header.php'); 
 
+<?php 
+ require_once('../../header.php'); 
 
 
 $lib = new datos_global();
@@ -14,21 +14,10 @@ $empresa_sess='';
         $empresa_sess .= $fila['nombre'];
     } 
 
-
- require_once('classes/lib_r.php'); 
-$evaluac = new evaluacion();
-$tabla = $evaluac->mostrar_tabla_entidad($id_empresa, '', '','','','','', "../../conexion.php"); 
-$version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
+require_once('classes/lib.php'); 
+$lib_control = new nivel_madurez();
+$tabla = $lib_control->obtener_datos('', "../../conexion.php");  
 ?>
-
-
-<style>
-    table, td, th{
-    border-bottom: 1px solid #ddd;
-    border: 1px solid #ddd;
-}
-    </style>
-    <input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $id_empresa;?>">
                     <div class="pcoded-content">
                       <!-- Page-header start -->
                       <div class="page-header">
@@ -37,7 +26,7 @@ $version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
                                   <div class="col-md-8">
                                       <div class="page-header-title">
                                           <h5 class="m-b-10"><?php echo $empresa_sess;?></h5>
-                                          <p class="m-b-0">Captura de evaluación</p>
+                                          <p class="m-b-0">Nivel de madurez</p>
                                       </div>
                                   </div>
                                   <div class="col-md-4">
@@ -45,7 +34,7 @@ $version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
                                           <li class="breadcrumb-item">
                                               <a href="index.html"> <i class="fa fa-home"></i> </a>
                                           </li>
-                                          <li class="breadcrumb-item"><a href="#!">Evaluación</a>
+                                          <li class="breadcrumb-item"><a href="#!">Catálogos</a>
                                           </li>
                                       </ul>
                                   </div>
@@ -63,42 +52,48 @@ $version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
                                             <!-- task, page, download counter  start -->
                                            
     
-                                            <!--  Evaluación -->
+                                            <!--  sale analytics start -->
                                             <div class="col-xl-12 col-md-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Evaluación</h5>
-                                                        <span class="text-muted">Captura de evaluación</span>
+                                                        <h5>Catálogo</h5>
+                                                        <span class="text-muted">Descripción corta de funcionalidad</span>
                                                         <div class="card-header-right">
                                                             <ul class="list-unstyled card-option">
-                                                                <i class="fa fa-window-maximize full-card"></i>
+                                                                <li><i class="fa fa fa-wrench open-card-option"></i></li>
+                                                                <li><i class="fa fa-window-maximize full-card"></i></li>
+                                                                <li><i class="fa fa-minus minimize-card"></i></li>
+                                                                <li><i class="fa fa-refresh reload-card"></i></li>
+                                                                <li><i class="fa fa-trash close-card"></i></li>
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <div class="card-block">
+                                                    <div class="card-block" id="div_principal" name="div_principal">
                                                         <!--info dentro-->
                                                         <div class="row">
                                                             <div class="col-xl-12 col-md-12">
-                                                                <label>Versión:</label>
+                                                                <label>Localizar por código o descripción:</label>
                                                                 </br>
-                                                                <?php echo $version; ?>
+                                                                <input type="text" class="form-control" id="buscar_codigo" name="buscar_codigo" placeholder="Introduce el código o descripción">
                                                             </div>
                                                         </div>
-
-                                                        <div class="row" id="tabla_principal" name="tabla_principal">
-                                                       <?php echo $tabla;?>
+                                                        <div class="row" id="contenido_control" name="contenido_control">
+                                                            <?php echo $tabla; ?>
                                                         </div>
-
+                                                        <div class="row">
+                                                            <div class="col-xl-12 col-md-12 " style="text-align: center;">
+                                                                <button class="btn btn-primary waves-effect waves-light " onclick="nuevo();">Nuevo</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            
                                         </div>
                                     </div>
                                     <!-- Page-body end -->
                                 </div>
                                 <div id="styleSelector"> </div>
                             </div>
+                           
                        <?php include '../../footer.php'; ?>
-                       <script type="text/javascript" src="assets/seguimiento.js"></script>
+                       <script type="text/javascript" src="assets/madurez.js"></script>

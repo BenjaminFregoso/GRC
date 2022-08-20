@@ -351,7 +351,7 @@ require 'conexion.php';
                           <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Auditoría</div>
                           <ul class="pcoded-item pcoded-left-item">
                               <li>
-                                  <a href="form-elements-component.html" class="waves-effect waves-dark">
+                                  <a href="/views/auditoria/cedula.php" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-check"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Cédulas de auditoría</span>
                                       <span class="pcoded-mcaret"></span>
@@ -416,6 +416,13 @@ require 'conexion.php';
                                           <a href="/views/catalogos/giros.php" class="waves-effect waves-dark">
                                               <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                               <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-21">Giro</span>
+                                              <span class="pcoded-mcaret"></span>
+                                          </a>
+                                      </li>
+                                      <li class="">
+                                          <a href="/views/catalogos/madurez.php" class="waves-effect waves-dark">
+                                              <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                              <span class="pcoded-mtext" data-i18n="nav.menu-levels.menu-level-23">Nivel de madurez</span>
                                               <span class="pcoded-mcaret"></span>
                                           </a>
                                       </li>

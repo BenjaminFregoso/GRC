@@ -130,6 +130,7 @@ $( document ).ready(function() {
 
   function total(id){
     var total = 0;
+    var total_activos = 0;
     var monitoreado_val = parseFloat($("#monitoreado_val").val());
     var documentado_val = parseFloat($("#documentado_val").val());
     var autorizado_val = parseFloat($("#autorizado_val").val());
@@ -140,46 +141,66 @@ $( document ).ready(function() {
     var desarrollo = parseFloat($("#desarrollo").val());
 
     var estatus = '';
-    if ($('#dato_documentado_'+id).is(":checked"))
-    {
-      total = total + documentado_val;
-      var documentado = 1;
+    var documentado = parseFloat($('#dato_documentado_'+id).val());
+    if($('#dato_documentado_'+id).is(':disabled')){
+      documentado=0;
+    }else if(documentado > documentado_val || Number.isNaN(documentado)){
+      documentado=0;
+      $('#dato_documentado_'+id).val(0);
     }else{
-      var documentado = 0;
+      total_activos = total_activos + documentado_val;
     }
-
-    if ($('#dato_autorizado_'+id).is(":checked"))
-    {
-      total = total + autorizado_val;
-      var autorizado = 1;
+    total = total + documentado;
+  
+    var autorizado = parseFloat($('#dato_autorizado_'+id).val());
+    if($('#dato_autorizado_'+id).is(':disabled')){
+      autorizado=0;
+    }else if(autorizado > autorizado_val || Number.isNaN(autorizado)){
+      autorizado=0;
+      $('#dato_autorizado_'+id).val(0);
     }else{
-      var autorizado = 0;
+      total_activos = total_activos + autorizado_val;
     }
-
-    if ($('#dato_difundido_'+id).is(":checked"))
-    {
-      total = total + difundido_val;
-      var difundido = 1;
+    total = total + autorizado;
+      
+    var difundido = parseFloat($('#dato_difundido_'+id).val());
+    if($('#dato_difundido_'+id).is(':disabled')){
+      difundido=0;
+    }else if(difundido > difundido_val || Number.isNaN(difundido)){
+      difundido=0;
+      $('#dato_difundido_'+id).val(0);
     }else{
-      var difundido = 0;
+      total_activos = total_activos + difundido_val;
     }
-
-    if ($('#dato_ejecutado_'+id).is(":checked"))
-    {
-      total = total + ejecutado_val;
-      var ejecutado = 1;
+    total = total + difundido;
+   
+    var ejecutado = parseFloat($('#dato_ejecutado_'+id).val());
+    if($('#dato_ejecutado_'+id).is(':disabled')){
+      ejecutado=0;
+    }else if(ejecutado > ejecutado_val || Number.isNaN(ejecutado)){
+      ejecutado=0;
+      $('#dato_ejecutado_'+id).val(0);
     }else{
-      var ejecutado = 0;
+      total_activos = total_activos + ejecutado_val;
     }
+    total = total + ejecutado;
 
-    if ($('#dato_monitoreado_'+id).is(":checked"))
-    {
-      total = total + monitoreado_val;
-      var monitoreado = 1;
+    var monitoreado = parseFloat($('#dato_monitoreado_'+id).val());
+    if($('#dato_monitoreado_'+id).is(':disabled')){
+      monitoreado=0;
+    }else if(monitoreado > monitoreado_val || Number.isNaN(monitoreado)){
+      monitoreado=0;
+      $('#dato_monitoreado_'+id).val(0);
     }else{
-      var monitoreado = 0;
+      total_activos = total_activos + monitoreado_val;
     }
+   
+    total = total + monitoreado;
+      
 
+    porcentaje = total / total_activos;
+
+    total = porcentaje * 100;
     if(total >= completado){
       estatus = 'Completado'
     }else if(total >= desarrollo){
@@ -200,7 +221,7 @@ $( document ).ready(function() {
       "incluir" : "../../../conexion.php",
     };
    //console.log(params);
-    $.ajax({
+     $.ajax({
       data:  params,
       url:  '/views/evaluacion/classes/lib_evaluacion.php',
       type:  'post',
@@ -211,6 +232,6 @@ $( document ).ready(function() {
       error: function(response) {
         alert('Algo anda mal!!! en el search');
       }
-    });
+    }); 
     
   }

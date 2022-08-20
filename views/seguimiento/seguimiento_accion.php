@@ -109,7 +109,6 @@ $control = $evaluac->mostrar_control("../../conexion.php");
                                                                     <option value="Completado">Completado</option>
                                                                     <option value="Desarrollo">Desarrollo</option>
                                                                     <option value="Nulo">Nulo</option>
-                                                                    <option value="Todos">Todos</option>
                                                                 </select>
                                                             </div>
 

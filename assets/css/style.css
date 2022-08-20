@@ -4880,6 +4880,13 @@ select.form-control:not([size]):not([multiple]) {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.td_input{
+                    width: 100%;
+                    padding: 0px;
+                    margin: 0px;
+                
+}
 /*====== Margin-right css ends ======*/
 /*====== Display css starts ======*/
 .d-none {

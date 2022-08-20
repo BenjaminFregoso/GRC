@@ -144,6 +144,11 @@ class evaluacion{
 
                 
                 if($fila['documentado'] == 1){
+                    if($fila['dato_documentado'] == '0'){
+                        $checked = "";
+                    }else{
+                        $checked = "checked";
+                    }
                     $disabled = "";
                     $color="";
                 }else{
@@ -151,53 +156,59 @@ class evaluacion{
                     $disabled = "disabled";
                 }
                 
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input class="td_input" type="number" min="0" max="'.$documentado_val.'" step="1" id="dato_documentado_'.$fila['id'].'" 
-                name="dato_documentado_'.$fila['id'].'" value="'.$fila['dato_documentado'].'" '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-
+                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_documentado_'.$fila['id'].'" name="dato_documentado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
                 if($fila['autorizado'] == 1){
+                    if($fila['dato_autorizado'] == '0'){
+                        $checked = "";
+                    }else{
+                        $checked = "checked";
+                    }
                     $disabled = "";
                     $color="";
                 }else{
                     $color = "background-color: LightGray;";
                     $disabled = "disabled";
                 }
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input class="td_input" type="number" min="0" max="'.$autorizado_val.'" step="1" id="dato_autorizado_'.$fila['id'].'" 
-                name="dato_autorizado_'.$fila['id'].'" value="'.$fila['dato_autorizado'].'" '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-
-                
+                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_autorizado_'.$fila['id'].'" name="dato_autorizado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
                 if($fila['difundido'] == 1){
+                    if($fila['dato_difundido'] == '0'){
+                        $checked = "";
+                    }else{
+                        $checked = "checked";
+                    }
                     $disabled = "";
                     $color="";
                 }else{
                     $color = "background-color: LightGray;";
                     $disabled = "disabled";
                 }
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input class="td_input" type="number" min="0" max="'.$difundido_val.'" step="1" id="dato_difundido_'.$fila['id'].'" 
-                name="dato_difundido_'.$fila['id'].'" value="'.$fila['dato_difundido'] .'" '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-                
-                
+                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_difundido_'.$fila['id'].'" name="dato_difundido_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
                 if($fila['ejecutado'] == 1){
+                    if($fila['dato_ejecutado'] == '0'){
+                        $checked = "";
+                    }else{
+                        $checked = "checked";
+                    }
                     $disabled = "";
                     $color="";
                 }else{
                     $color = "background-color: LightGray;";
                     $disabled = "disabled";
                 }
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input class="td_input" type="number" min="0" max="'.$ejecutado_val.'" step="1" id="dato_ejecutado_'.$fila['id'].'" 
-                name="dato_ejecutado_'.$fila['id'].'" value="'.$fila['dato_ejecutado'].'" '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-
-               
+                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_ejecutado_'.$fila['id'].'" name="dato_ejecutado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
                 if($fila['monitoreado'] == 1){
+                    if($fila['dato_monitoreado'] == '0'){
+                        $checked = "";
+                    }else{
+                        $checked = "checked";
+                    }
                     $disabled = "";
                     $color="";
                 }else{
                     $color = "background-color: LightGray;";
                     $disabled = "disabled";
                 }
-                $contenido .= '<td class="letra_pequena" style="text-align: center; '.$color.'"><input class="td_input" type="number" min="0" max="'.$monitoreado_val.'" step="1" id="dato_monitoreado_'.$fila['id'].'" 
-                name="dato_monitoreado_'.$fila['id'].'" value="'.$fila['dato_monitoreado'].'" '.$disabled.' onChange="total('.$fila['id'].');"></td>';
-
-                
+                $contenido .= '<td class="letra_pequena_head" style="text-align: center; '.$color.'"><input type="checkbox" value="" id="dato_monitoreado_'.$fila['id'].'" name="dato_monitoreado_'.$fila['id'].'" '. $checked.' '.$disabled.' onChange="total('.$fila['id'].');"></td>';
 
                 $contenido .= '<td class="letra_pequena" style="text-align: center;"><span id="total_puntos_'.$fila['id'].'" name="total_puntos_'.$fila['id'].'">'.$fila['total_puntos'].'</span></td>';
                 
@@ -537,7 +548,12 @@ class evaluacion{
         $tp_obtenidos = 0;
         $tcuantitativo = 0;
         $tcualitativo = 0;
-
+        $cumplido=0;
+        $proceso=0;
+        $nulos=0;
+        $t_cumplido=0;
+        $t_proceso=0;
+        $t_nulos=0;
         include $conexion;
         if($id_version == ''){
             $sql_version = "SELECT version, version_descripcion FROM control_cliente WHERE status_conexion = 1 AND id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC LIMIT 1";
@@ -593,17 +609,20 @@ class evaluacion{
             while($fila_ent=$query_entidades->fetch_array(MYSQLI_ASSOC)){
                 $id_entidad = $fila_ent['id_entidad'];
                 $desc_entidad = $fila_ent['descripcion'];
-                
-                
-
+                $promedio=0;
+                $cumplido=0;
+                $proceso=0;
+                $nulos=0;
+                $p_obtenidos = 0;
                 //Consulta
                 $sql_consulta = "SELECT cli.id, cli.dato_aplica, cli.dato_sin_control, cli.dato_documentado, 
                 cli.dato_autorizado, cli.dato_difundido, cli.dato_ejecutado, cli.dato_monitoreado,
                 cli.total_puntos, cli.estatus_evaluacion,
                 con.id_control, con.descripcion, pro.descripcion AS desc_proceso, ent.descripcion 
                 AS desc_entidad, tiri.descripcion AS desc_riesgo, tico.descripcion AS desc_control, con.documentado, 
-                con.autorizado, con.difundido, con.ejecutado, con.monitoreado, con.referencia, con.riesgo, con.status_control 
+                con.autorizado, con.difundido, con.ejecutado, con.monitoreado, con.referencia, con.riesgo, con.status_control, dia.avance
                 FROM control_cliente AS cli 
+                LEFT JOIN cliente_diagnostico AS dia ON dia.id_control_cliente = cli.id
                 LEFT JOIN control AS con ON cli.id_control = con.id_control
                 LEFT JOIN entidad AS ent ON con.id_entidad = ent.id_entidad
                 LEFT JOIN proceso AS pro ON pro.id_proceso = con.id_proceso
@@ -615,19 +634,14 @@ class evaluacion{
                  
                 if($query_servicio->num_rows>=1){
                     while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
-        
-                        $puntos_linea = floatval($fila['total_puntos']);
+                        $evaluados++;
+                        $puntos_linea = floatval($fila['avance']);
                         $p_obtenidos += $puntos_linea; 
-                        if($fila['dato_aplica'] != 0){
-                            $no_aplica++;
-                        }else if($fila['dato_sin_control'] != 0){
-                            $sin_control++;
-                        }else if($puntos_linea >= $completado_meta){
-                            $completado++;
-                            $evaluados++;
+
+                       if($puntos_linea >= $completado_meta){
+                            $cumplido++;
                         }else if($puntos_linea >= $desarrollo_meta){
-                            $desarrollo++;
-                            $evaluados++;
+                            $proceso++;
                         }else{
                             $nulos++;
                         }
@@ -639,67 +653,32 @@ class evaluacion{
                     
                 }   
         
-                if($completado != 0 && $evaluados != 0){
-                    $cuantitativo = ($completado / $evaluados) *100;
+                
+                if($p_obtenidos != 0 && $evaluados != 0){
+                    $promedio = $p_obtenidos / $evaluados;
                 }else{
-                    $cuantitativo = 0;
+                    $promedio = 0;
                 }
-                $p_requeridos = $p_requeridos * 100;
-        
-                if($p_requeridos != 0 && $p_obtenidos != 0){
-                    $cualitativo = ($p_obtenidos / $p_requeridos) * 100;
-                }else{
-                    $cualitativo = 0;
-                }
+                
 
                 $contenido .= '<tr id="linea_'.$id_entidad.'" name="linea_'.$id_entidad.'">
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$desc_entidad.'">'.$desc_entidad.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.round($cuantitativo,2).'">'.round($cuantitativo,2).'%</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$evaluados.'">'.$evaluados.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$completado.'">'.$completado.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$desarrollo.'">'.$desarrollo.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$sin_control.'">'.$sin_control.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$no_aplica.'">'.$no_aplica.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$nulos.'">'.$nulos.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$p_requeridos.'">'.$p_requeridos.'</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$p_obtenidos.'">'.$p_obtenidos.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.round($cualitativo,2).'">'.round($cualitativo,2).'%</td>
+                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$evaluados.'">'.$evaluados.'</td>
+                
+                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.round($promedio,2).'">'.round($promedio,2).'%</td>
+                
+                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$nulos.'">'.$nulos.'</td>
+                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$proceso.'">'.$proceso.'</td>
+                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$cumplido.'">'.$cumplido.'</td>
                 </tr>';
 
-                $tevaluados += $evaluados;
-                $tcompletado += $completado;
-                $tdesarrollo += $desarrollo;
-                $tno_aplica += $sin_control;
-                $tsin_control += $no_aplica;
-                $tnulos += $nulos;
-                $tp_requeridos += $p_requeridos;
-                $tp_obtenidos += $p_obtenidos;
-                
-
-                $evaluados = 0;
-                $completado = 0;
-                $desarrollo = 0;
-                $no_aplica = 0;
-                $sin_control = 0;
-                $nulos = 0;
-                $p_requeridos = 0;
-                $p_obtenidos = 0;
-                $cuantitativo = 0;
-                $cualitativo = 0;
+                 $t_cumplido = $t_cumplido + $cumplido;
+                $t_proceso = $t_proceso + $proceso;
+                $t_nulos = $t_nulos + $nulos; 
             }
         }
-        
-        if($tcompletado != 0 && $tevaluados != 0){
-            $tcuantitativo = ($tcompletado / $tevaluados) *100;
-        }else{
-            $tcuantitativo = 0;
-        }
-
-        if($tp_requeridos != 0 && $tp_obtenidos != 0){
-            $tcualitativo = ($tp_obtenidos / $tp_requeridos) * 100;
-        }else{
-            $tcualitativo = 0;
-        }
+     
         
         
         $html .= '
@@ -711,17 +690,13 @@ class evaluacion{
                     width:100%;">
                         <thead>
                             <tr>
-                                <th class="letra_pequena_head" style="width: 20%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Entidad">Entidad</th>
-                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="% Cuantitativo">%</br>Cuantitativo</th>
-                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Evaluados">Evaluados</th>
-                                <th class="letra_pequena_head" style="background-color: Chartreuse;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Completados">Completados</th>
-                                <th class="letra_pequena_head" style="background-color: Yellow;" data-toggle="tooltip" data-placement="top" title="" data-original-title="En desarrollo">En</br>desarrollo</th>
-                                <th class="letra_pequena_head" style="background-color: OrangeRed;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sin control">Sin</br>control</th>
-                                <th class="letra_pequena_head table-active" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Aplica">No</br>Aplica</th>
-                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Nulos">Nulos</th>
-                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Puntos Requeridos">Puntos</br>Requeridos</th>
-                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Puntos Obtenidos">Puntos</br>Obtenidos</th>
-                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="% Cualitativo">% Cualitativo</th>
+                                <th class="letra_pequena_head" style="width: 20%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Descripcion">Descripcion</th>
+                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total de puntos obtenidos">Total de puntos</br>Obtenidos</th>
+                                <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Puntos evaluados">Puntos</br>Evaluados</th>
+                                <th class="letra_pequena_head"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Promedio">Promedio</th>
+                                <th class="letra_pequena_head" style="background-color: OrangeRed;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sin avance">Sin</br>Avance</th>
+                                <th class="letra_pequena_head" style="background-color: Yellow;" data-toggle="tooltip" data-placement="top" title="" data-original-title="En proceso">En</br>proceso</th>
+                                <th class="letra_pequena_head" style="background-color: Chartreuse;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cumplido">Cumplido</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -739,31 +714,19 @@ class evaluacion{
                     width:100%;">
             <thead >
                 <tr>
-                    <th class="letra_pequena_head" style="width: 20%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Nivel de riesgo">Nivel de riesgo</th>
-                    <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="% Cuantitativo">%</br>Cuantitativo</th>
-                    <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Evaluados">Evaluados</th>
-                    <th class="letra_pequena_head" style="background-color: Chartreuse;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Completados">Completados</th>
-                    <th class="letra_pequena_head" style="background-color: Yellow;" data-toggle="tooltip" data-placement="top" title="" data-original-title="En desarrollo">En</br>desarrollo</th>
-                    <th class="letra_pequena_head" style="background-color: OrangeRed;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sin control">Sin</br>control</th>
-                    <th class="letra_pequena_head table-active" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Aplica">No</br>Aplica</th>
-                    <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Nulos">Nulos</th>
-                    <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Puntos Requeridos">Puntos</br>Requeridos</th>
-                    <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="Puntos Obtenidos">Puntos</br>Obtenidos</th>
-                    <th class="letra_pequena_head" data-toggle="tooltip" data-placement="top" title="" data-original-title="% Cualitativo">% Cualitativo</th>
+                <th class="letra_pequena_head"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Promedio">Total</th>
+                <th class="letra_pequena_head" style="background-color: OrangeRed;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sin avance">Sin</br>Avance</th>
+                <th class="letra_pequena_head" style="background-color: Yellow;" data-toggle="tooltip" data-placement="top" title="" data-original-title="En proceso">En</br>proceso</th>
+                <th class="letra_pequena_head" style="background-color: Chartreuse;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cumplido">Cumplido</th>
+           
                     </tr>
             </thead>
             <tbody>
-            <td class="letra_pequena bg-danger">0.00%</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.round($tcuantitativo,2).'">'.round($tcuantitativo,2).'%</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tevaluados.'">'.$tevaluados.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tcompletado.'">'.$tcompletado.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tdesarrollo.'">'.$tdesarrollo.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tsin_control.'">'.$tsin_control.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tno_aplica.'">'.$tno_aplica.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tnulos.'">'.$tnulos.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tp_requeridos.'">'.$tp_requeridos.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tp_obtenidos.'">'.$tp_obtenidos.'</td>
-                <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.round($tcualitativo,2).'">'.round($tcualitativo,2).'%</td>
+            <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="">?</td>
+                
+            <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$t_nulos.'">'.$t_nulos.'</td>
+            <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$t_proceso.'">'.$t_proceso.'</td>
+            <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$t_cumplido.'">'.$t_cumplido.'</td>
             </tbody>
         </table>
         </div></div>
