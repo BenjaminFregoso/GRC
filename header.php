@@ -358,7 +358,7 @@ require 'conexion.php';
                                   </a>
                               </li>
                               <li>
-                                  <a href="form-elements-component.html" class="waves-effect waves-dark">
+                                <a href="/views/auditoria/resultado_auditoria.php" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-pie-chart"></i><b>OC</b></span>
                                       <span class="pcoded-mtext" data-i18n="nav.form-components.main">Resultado de auditoría</span>
                                       <span class="pcoded-mcaret"></span>

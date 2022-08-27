@@ -95,7 +95,7 @@ class evaluacion{
         LEFT JOIN proceso AS pro ON pro.id_proceso = con.id_proceso
         LEFT JOIN tipo_riesgo AS tiri ON tiri.id_tipo_riesgo = con.id_tipo_riesgo
         LEFT JOIN tipo_control AS tico ON tico.id_tipo_control = con.id_tipo_control
-        WHERE cli.id_cliente = $id_empresa AND cli.version = $id_version AND cli.status_conexion = 1 $filtros";
+        WHERE cli.id_cliente = $id_empresa AND cli.version = $id_version AND cli.status_conexion = 1 $filtros ORDER BY ent.descripcion ";
          $query_servicio = $mysqli->query($sql_consulta);
          
 		if($query_servicio->num_rows>=1){
@@ -254,6 +254,7 @@ class evaluacion{
             </div>
         </div>'.$valores.'';
 
+        $riesgo = 100 - round($cualitativo,2);
         $html .= '<div class="col-xl-2 col-md-12 " style="text-align: center;">
         <div class="card-block table-border-style">
                 <div >
@@ -267,7 +268,7 @@ class evaluacion{
                     <tr>
                     </tr>
                     <th class="letra_pequena_head bg-danger" style="text-align: center;">
-                        <span id="nivel_riesgo">0.0%</span>
+                        <span id="nivel_riesgo">'.$riesgo.'%</span>
                     </th>
                 </tr>
             </thead>
@@ -586,7 +587,7 @@ class evaluacion{
         $sql_consulta_entidades = "SELECT con.id_entidad, ent.descripcion  FROM control_cliente AS cli
         LEFT JOIN control AS con ON con.id_control = cli.id_control
         LEFT JOIN entidad AS ent ON ent.id_entidad = con.id_entidad
-        WHERE cli.id_cliente = $id_empresa GROUP BY con.id_entidad";
+        WHERE cli.id_cliente = $id_empresa GROUP BY con.id_entidad ORDER BY ent.descripcion";
         $query_entidades = $mysqli->query($sql_consulta_entidades);
          
 		if($query_entidades->num_rows>=1){
@@ -732,6 +733,8 @@ class evaluacion{
             </div>
         </div>'.$valores.'';
 
+        $riesgo = 100 - round($tcualitativo,2);
+
         $html .= '<div class="col-xl-12 col-md-12 " style="text-align: center;">
         <div class="card-block table-border-style">
                 <div >
@@ -753,7 +756,7 @@ class evaluacion{
                     </tr>
             </thead>
             <tbody>
-            <td class="letra_pequena bg-danger">0.00%</td>
+            <td class="letra_pequena bg-danger">'.$riesgo.'%</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.round($tcuantitativo,2).'">'.round($tcuantitativo,2).'%</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tevaluados.'">'.$tevaluados.'</td>
                 <td class="letra_pequena" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$tcompletado.'">'.$tcompletado.'</td>

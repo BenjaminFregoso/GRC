@@ -69,7 +69,7 @@
                                                                 </select>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
+                                                            <div class="col-xl-2 col-md-12">
                                                             <input type="checkbox" value=""><label>&nbsp;Entidad:</label>
                                                                 </br>
                                                                 
@@ -80,7 +80,7 @@
                                                                 </select>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
+                                                            <div class="col-xl-2 col-md-12">
                                                             <input type="checkbox" value=""><label>&nbsp;Proceso:</label>
                                                                 </br>
                                                                 
@@ -91,18 +91,20 @@
                                                                 </select>
                                                             </div>
 
-                                                            <div class="col-xl-7 col-md-12">
+                                                            <div class="col-xl-3 col-md-12">
                                                             <label>Estatus:</label>
                                                                 </br>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="completado_btn" name="completado_btn">Completado</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="desarrollo_btn" name="desarrollo_btn">Desarrollo</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="sin_control_btn" name="sin_control_btn">Sin control</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="no_aplica_btn" name="no_aplica_btn">No aplica</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="nulo_btn" name="nulo_btn">Nulo</button>
-                                                                <button class="btn btn-inverse waves-effect waves-light" id="todos_btn" name="todos_btn">Todos</button>
+                                                                <select id="select_status" name="select_status" class="form-control textos " onchange="filtro();">
+                                                                    <option value="">Selecciona una opción</option>
+                                                                    <option value="Completado">Completado</option>
+                                                                    <option value="Desarrollo">Desarrollo</option>
+                                                                    <option value="Nulo">Nulo</option>
+                                                                    <option value="Sin control">Sin control</option>
+                                                                    <option value="No aplica">No aplica</option>
+                                                                </select>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
+                                                            <div class="col-xl-2 col-md-12">
                                                             <input type="checkbox" value=""><label>&nbsp;Tipo de riesgo:</label>
                                                                 </br>
                                                                 
@@ -113,7 +115,7 @@
                                                                 </select>
                                                             </div>
 
-                                                            <div class="col-xl-1 col-md-12">
+                                                            <div class="col-xl-2 col-md-12">
                                                             <input type="checkbox" value=""><label>&nbsp;Tipo de control:</label>
                                                                 </br>
                                                                 
@@ -130,41 +132,42 @@
 </br>
                                                                 <div class="card-block table-border-style">
                                                                     <div class="table-responsive">
-                                                                        <table class="table table-xs table-hover">
+                                                                    <table style="table-layout:fixed;
+                                                                        width:100%;">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Entidad</th>
-                                                                                    <th>Proceso</th>
-                                                                                    <th>Tipo de riesgo</th>
-                                                                                    <th>Tipo de control</th>
-                                                                                    <th>Objetivos de control</th>
-                                                                                    <th>No aplica</th>
-                                                                                    <th>Sin control</th>
-                                                                                    <th>Documentado</th>
-                                                                                    <th>Autorizado</th>
-                                                                                    <th>Difundido</th>
-                                                                                    <th>Ejecutado</th>
-                                                                                    <th>Monitoreado</th>
-                                                                                    <th>Total de puntos</th>
-                                                                                    <th>Estatus</th>
+                                                                                    <th class="letra_pequena_head">Entidad</th>
+                                                                                    <th class="letra_pequena_head">Proceso</th>
+                                                                                    <th class="letra_pequena_head">Tipo de riesgo</th>
+                                                                                    <th class="letra_pequena_head">Tipo de control</th>
+                                                                                    <th class="letra_pequena_head">Objetivos de control</th>
+                                                                                    <th class="letra_pequena_head">No aplica</th>
+                                                                                    <th class="letra_pequena_head">Sin control</th>
+                                                                                    <th class="letra_pequena_head">Documentado</th>
+                                                                                    <th class="letra_pequena_head">Autorizado</th>
+                                                                                    <th class="letra_pequena_head">Difundido</th>
+                                                                                    <th class="letra_pequena_head">Ejecutado</th>
+                                                                                    <th class="letra_pequena_head">Monitoreado</th>
+                                                                                    <th class="letra_pequena_head">Total de puntos</th>
+                                                                                    <th class="letra_pequena_head">Estatus</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
-                                                                                    <td><p style="padding-top: 12px;">Dato dato dato</p></td>
+                                                                                    <td class="letra_pequena_head">SEMINUEVOS</td>
+                                                                                    <td class="letra_pequena_head">CIERRE CONTABLE</td>
+                                                                                    <td class="letra_pequena_head">LEGAL</td>
+                                                                                    <td class="letra_pequena_head">MEJORA DE PROCESOS</td>
+                                                                                    <td class="letra_pequena_head">PRUEBAS</td>
+                                                                                    <td class="letra_pequena_head"><input type="checkbox" value="" id="no_aplica_253" name="no_aplica_253" onchange="no_aplica(253);"></td>
+                                                                                    <td class="letra_pequena_head"><input type="checkbox" value="" id="no_aplica_254" name="no_aplica_254" onchange="no_aplica(253);"></td>
+                                                                                    <td class="letra_pequena_head"><input class="td_input" type="number" min="0" max="40" step="1" id="dato_documentado_253" name="dato_documentado_253" value="10" onchange="total(253);"></td>
+                                                                                    <td class="letra_pequena_head"><input class="td_input" type="number" min="0" max="40" step="1" id="dato_documentado_253" name="dato_documentado_253" value="10" onchange="total(253);"></td>
+                                                                                    <td class="letra_pequena_head"><input class="td_input" type="number" min="0" max="40" step="1" id="dato_documentado_253" name="dato_documentado_253" value="10" onchange="total(253);"></td>
+                                                                                    <td class="letra_pequena_head"><input class="td_input" type="number" min="0" max="40" step="1" id="dato_documentado_253" name="dato_documentado_253" value="10" onchange="total(253);"></td>
+                                                                                    <td class="letra_pequena_head"><input class="td_input" type="number" min="0" max="40" step="1" id="dato_documentado_253" name="dato_documentado_253" value="10" onchange="total(253);"></td>
+                                                                                    <td class="letra_pequena_head">10</td>
+                                                                                    <td class="letra_pequena_head">En desarrollo</td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -178,8 +181,9 @@
                                                             <div class="col-xl-2 col-md-12 " style="text-align: center;">
                                                                 <div class="card-block table-border-style">
                                                                 <div class="table-responsive">
-                                                                <table class="table table-xs table-hover" >
-                                                                    <thead >
+                                                                <table style="table-layout:fixed;
+                                                                        width:100%;">
+                                                                            <thead>
                                                                         <tr>
                                                                             <th style="text-align: center;">
                                                                                 <span>Nivel de riesgo</span>
@@ -200,8 +204,9 @@
                                                                 
                                                                 <div class="card-block table-border-style">
                                                                 <div class="table-responsive">
-                                                                <table class="table table-xs table-hover" >
-                                                                    <thead >
+                                                                <table style="table-layout:fixed;
+                                                                        width:100%;">
+                                                                            <thead>
                                                                         <tr>
                                                                             <th style="text-align: center;">
                                                                                 <span>Cuantitativo</span>
@@ -260,8 +265,9 @@
                                                                 
                                                                 <div class="card-block table-border-style">
                                                                 <div class="table-responsive">
-                                                                <table class="table table-xs table-hover" >
-                                                                    <thead >
+                                                                <table style="table-layout:fixed;
+                                                                        width:100%;">
+                                                                            <thead>
                                                                         <tr>
                                                                             <th style="text-align: center;">
                                                                                 <span>Puntos requeridos</span>

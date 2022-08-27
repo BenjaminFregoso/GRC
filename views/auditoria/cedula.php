@@ -230,6 +230,26 @@ $version = $evaluac->mostrar_version($id_empresa, "../../conexion.php");
                                                                     
                                                                     <input type="text" id="cedula_form" name="cedula_form" class="form-control" placeholder="Comentario" value="" >
                                                                     </div>
+
+                                                                    <div class="col-sm-12">
+                                                                        </br>
+                                                                    <div class="accordion-panel">
+                                                                        <div class="accordion-heading" role="tab" id="headingOne">
+                                                                            <h3 class="card-title accordion-title">
+                                                                                <a class="accordion-msg waves-effect waves-dark scale_active collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                                                Documento
+                                                                            </a>
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                                        <div class="accordion-content accordion-desc">
+                                                                            <p>
+                                                                               Documento
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                </div>
                                                                     </div>
 
                                                                 </div>
