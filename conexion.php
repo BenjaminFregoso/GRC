@@ -15,9 +15,9 @@ $CFG->dbtype    = 'mysqli';
 $CFG->dblibrary = 'native';
 $CFG->dbhost    = 'localhost';
 $CFG->dbname    = 'grc';
-$CFG->dbuser    = 'root';
-$CFG->dbpass    = '';
-$CFG->wwwroot    = 'https://localhost'; 
+$CFG->dbuser    = 'benack';
+$CFG->dbpass    = 'R0CK3T0P4SS';
+$CFG->wwwroot    = 'http://localhost:8000'; 
 
 $mysqli= new mysqli($CFG->dbhost,$CFG->dbuser,$CFG->dbpass,$CFG->dbname);
 if(mysqli_connect_errno()){

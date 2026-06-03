@@ -17,7 +17,7 @@ class evaluacion{
 
         include $conexion;
         if($id_version == ''){
-            $sql_version = "SELECT version, version_descripcion FROM control_cliente WHERE status_conexion = 1 AND id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC LIMIT 1";
+            $sql_version = "SELECT version, ANY_VALUE(version_descripcion) AS version_descripcion FROM control_cliente WHERE status_conexion = 1 AND id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC LIMIT 1";
             $query_serv = $mysqli->query($sql_version);
             if($query_serv->num_rows>=1){
                 $fila=$query_serv->fetch_array(MYSQLI_ASSOC);

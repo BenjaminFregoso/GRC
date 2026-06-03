@@ -170,6 +170,92 @@ Para más detalles técnicos sobre la estructura de datos, consultar los archivo
 - Tooltips
 - Tipografía
 
+## Proceso de Desarrollo e Implementación
+
+### Configuración Inicial
+
+1. **Base de Datos**
+   - Asegurar que MySQL 8.0+ está instalado
+   - Crear la base de datos: `CREATE DATABASE grc CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
+   - Importar schema.sql: `mysql -u usuario -p grc < schema.sql`
+
+2. **Servidor PHP**
+   - PHP 8.2.12 o superior recomendado
+   - Iniciar servidor de desarrollo: `php -S localhost:8000`
+   - El servidor responde en: `http://localhost:8000`
+
+3. **Credenciales**
+   - **Base de Datos**: Configurar en [conexion.php](conexion.php)
+   - **Usuario Admin**: admin / admin123
+   - ⚠️ Cambiar contraseña inmediatamente en producción
+
+### Solución de Problemas Comunes
+
+#### 1. Error: "only_full_group_by" en MySQL 8.0+
+**Causa**: MySQL 8.0 por defecto requiere que todos los campos sin agregación estén en la cláusula GROUP BY.
+
+**Solución Aplicada**: 
+- Usar función `ANY_VALUE()` en campos no agregados dentro de GROUP BY
+- **Archivos afectados**:
+  - `views/evaluacion/classes/lib.php` (Lines 21, 99)
+  - `views/auditoria/classes/lib.php` (Lines 32, 115)
+  - `views/seguimiento/classes/lib.php` (Line 20)
+  - `views/seguimiento/classes/lib_r.php` (Lines 20, 395, 559)
+
+**Ejemplo de corrección**:
+```sql
+-- ❌ Incorrecto (falla en MySQL 8.0+)
+SELECT version, version_descripcion 
+FROM control_cliente 
+WHERE status_conexion = 1 AND id_cliente = 1 
+GROUP BY version
+
+-- ✅ Correcto (compatible con ONLY_FULL_GROUP_BY)
+SELECT version, ANY_VALUE(version_descripcion) AS version_descripcion 
+FROM control_cliente 
+WHERE status_conexion = 1 AND id_cliente = 1 
+GROUP BY version
+```
+
+#### 2. Error: URL incorrecto en conexión HTTPS
+**Causa**: `conexion.php` tenía URL configurada como `https://localhost` sin puerto de escucha.
+
+**Solución**: 
+- Actualizar `wwwroot` a `http://localhost:8000` en [conexion.php](conexion.php)
+- Cambiar puertos según configuración del servidor
+
+#### 3. Tabla cliente vacía después de instalación
+**Descripción**: La tabla cliente se crea vacía en schema.sql. Se necesita crear al menos una empresa para acceder al dashboard.
+
+**Solución**: 
+```sql
+INSERT INTO cliente (nombre, id_giro, id_madurez, status_empresa) 
+VALUES ('Empresa de Prueba', 1, 1, 1);
+```
+
+### Flujo de Acceso a la Aplicación
+
+1. Acceder a `http://localhost:8000` o `http://localhost:8000/index.php`
+2. Login con usuario: `admin` / contraseña: `admin123`
+3. Seleccionar empresa en página de selección (`empresa.php`)
+4. Acceso a dashboard y módulos funcionales
+
+### Módulos Funcionales y Acceso
+
+- **Dashboard**: `/index.php` - Vista general del sistema
+- **Evaluación**: `/views/evaluacion/` - Evaluación de controles por entidad
+- **Seguimiento**: `/views/seguimiento/` - Acciones correctivas y resultados
+- **Auditoría**: `/views/auditoria/` - Cédulas y resultados de auditoría
+- **Catálogos**: `/views/catalogos/` - Datos maestros del sistema
+- **Configuración**: `/views/configuracion/` - Usuarios y compañías
+
+### Consideraciones Técnicas
+
+- **Charset de Base de Datos**: utf8mb4_unicode_ci para soporte multiidioma
+- **Motor**: InnoDB para transaccionalidad e integridad referencial
+- **Sesiones**: Cookie-based con validación de empresa activa
+- **Validación**: Implementar validación adicional en lado del servidor para producción
+
 ##  Contribuciones
 
 Para contribuir al proyecto:

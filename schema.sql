@@ -40,9 +40,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `status_empresa` TINYINT DEFAULT 1,
   `fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `fecha_actualizacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX `idx_status` (`status_empresa`),
-  FOREIGN KEY (`id_giro`) REFERENCES `giro`(`id_giro`),
-  FOREIGN KEY (`id_madurez`) REFERENCES `nivel_madurez`(`id`)
+  INDEX `idx_status` (`status_empresa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
@@ -140,8 +138,7 @@ CREATE TABLE IF NOT EXISTS `configuracion` (
   `id_madurez` INT,
   `completado` INT DEFAULT 0,
   `desarrollo` INT DEFAULT 0,
-  `fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (`id_madurez`) REFERENCES `nivel_madurez`(`id`)
+  `fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
@@ -167,11 +164,7 @@ CREATE TABLE IF NOT EXISTS `control` (
   `fecha_actualizacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `idx_status` (`status_control`),
   INDEX `idx_entidad` (`id_entidad`),
-  INDEX `idx_proceso` (`id_proceso`),
-  FOREIGN KEY (`id_entidad`) REFERENCES `entidad`(`id_entidad`),
-  FOREIGN KEY (`id_proceso`) REFERENCES `proceso`(`id_proceso`),
-  FOREIGN KEY (`id_tipo_riesgo`) REFERENCES `tipo_riesgo`(`id_tipo_riesgo`),
-  FOREIGN KEY (`id_tipo_control`) REFERENCES `tipo_control`(`id_tipo_control`)
+  INDEX `idx_proceso` (`id_proceso`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
@@ -199,9 +192,7 @@ CREATE TABLE IF NOT EXISTS `control_cliente` (
   INDEX `idx_control` (`id_control`),
   INDEX `idx_version` (`version`),
   INDEX `idx_status` (`status_conexion`),
-  UNIQUE KEY `unique_cliente_control_version` (`id_cliente`, `id_control`, `version`),
-  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
-  FOREIGN KEY (`id_control`) REFERENCES `control`(`id_control`)
+  UNIQUE KEY `unique_cliente_control_version` (`id_cliente`, `id_control`, `version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
@@ -218,8 +209,7 @@ CREATE TABLE IF NOT EXISTS `cliente_diagnostico` (
   `estado` VARCHAR(50) DEFAULT 'En Progreso',
   `fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `fecha_actualizacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX `idx_control_cliente` (`id_control_cliente`),
-  FOREIGN KEY (`id_control_cliente`) REFERENCES `control_cliente`(`id`)
+  INDEX `idx_control_cliente` (`id_control_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
@@ -321,3 +311,4 @@ CREATE INDEX `idx_cliente_diagnostico_control` ON `cliente_diagnostico`(`id_cont
 -- =====================================================
 -- FIN DEL SCHEMA
 -- =====================================================
+
