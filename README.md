@@ -67,12 +67,20 @@ cd GRC
 ```
 
 ### 2. Configuración de Base de Datos
-- Editar `conexion.php` con los datos de conexión a la base de datos
-- Crear la base de datos necesaria en MySQL/MariaDB
+- Importar el esquema SQL: [schema.sql](schema.sql)
+- Editar [conexion.php](conexion.php) con los datos de conexión a MySQL
+- Consultar [DATABASE_SETUP.md](DATABASE_SETUP.md) para instrucciones detalladas de instalación
+
+**Credenciales iniciales:**
+- Usuario: `admin`
+- Contraseña: `admin123`
+
+⚠️ **Cambiar inmediatamente después de la instalación**
 
 ### 3. Configuración del Servidor Web
-- Colocar el proyecto en la carpeta raíz del servidor web
+- Colocar el proyecto en la carpeta raíz del servidor web (htdocs, www, etc.)
 - Asegurar permisos de lectura/escritura en directorios necesarios
+- Verificar que PHP 5.6+ está instalado con soporte a MySQLi
 
 ### 4. Acceso a la Aplicación
 ```
@@ -119,6 +127,31 @@ Control de acciones:
 - Sistema de autenticación basado en sesiones PHP
 - Gestión independiente por empresa
 - Control de acceso a módulos funcionales
+
+##  Documentación de Base de Datos
+
+### Archivos de Documentación
+- **[schema.sql](schema.sql)** - Archivo SQL con estructura completa de la base de datos
+- **[DATABASE_SETUP.md](DATABASE_SETUP.md)** - Guía de instalación y configuración de la BD
+- **[DATABASE_RELATIONSHIPS.md](DATABASE_RELATIONSHIPS.md)** - Diagrama ER y relaciones entre tablas
+- **[DATABASE_DICTIONARY.md](DATABASE_DICTIONARY.md)** - Diccionario detallado de todas las tablas y campos
+
+### Tablas Principales
+1. **usuarios** - Información de usuarios del sistema
+2. **cliente** - Empresas/clientes del sistema
+3. **control** - Objetivos de control y controles
+4. **control_cliente** - Evaluaciones de controles por cliente
+5. **cliente_diagnostico** - Seguimiento de acciones correctivas
+
+### Catálogos Disponibles
+- **entidad** - Entidades organizacionales
+- **proceso** - Procesos empresariales
+- **giro** - Giros comerciales
+- **tipo_riesgo** - Tipos de riesgo
+- **tipo_control** - Tipos de control
+- **nivel_madurez** - Niveles de madurez del control
+
+Para más detalles técnicos sobre la estructura de datos, consultar los archivos de documentación mencionados arriba.
 
 ##  Estructura de Componentes
 
