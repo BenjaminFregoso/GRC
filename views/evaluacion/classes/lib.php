@@ -83,7 +83,7 @@ class evaluacion{
             $filtros .= " AND tico.id_tipo_control = '{$control}' ";
         }
         
-        $sql_consulta = "SELECT cli.id, cli.dato_aplica, cli.dato_sin_control, cli.dato_documentado, 
+        $sql_select = "SELECT cli.id, cli.dato_aplica, cli.dato_sin_control, cli.dato_documentado, 
         cli.dato_autorizado, cli.dato_difundido, cli.dato_ejecutado, cli.dato_monitoreado,
         cli.total_puntos, cli.estatus_evaluacion,
         con.id_control, con.descripcion, pro.descripcion AS desc_proceso, ent.descripcion 
@@ -94,9 +94,16 @@ class evaluacion{
         LEFT JOIN entidad AS ent ON con.id_entidad = ent.id_entidad
         LEFT JOIN proceso AS pro ON pro.id_proceso = con.id_proceso
         LEFT JOIN tipo_riesgo AS tiri ON tiri.id_tipo_riesgo = con.id_tipo_riesgo
-        LEFT JOIN tipo_control AS tico ON tico.id_tipo_control = con.id_tipo_control
-        WHERE cli.id_cliente = $id_empresa AND cli.version = $id_version AND cli.status_conexion = 1 $filtros ORDER BY ent.descripcion ";
-         $query_servicio = $mysqli->query($sql_consulta);
+        LEFT JOIN tipo_control AS tico ON tico.id_tipo_control = con.id_tipo_control";
+
+        // Construir cláusula WHERE de forma segura
+        $where = " WHERE cli.id_cliente = $id_empresa AND cli.status_conexion = 1";
+        if($id_version !== '' && $id_version !== null){
+            $where .= " AND cli.version = $id_version";
+        }
+
+        $sql_consulta = $sql_select . $where . " $filtros ORDER BY ent.descripcion ";
+        $query_servicio = $mysqli->query($sql_consulta);
          
 		if($query_servicio->num_rows>=1){
             while($fila=$query_servicio->fetch_array(MYSQLI_ASSOC)){
@@ -382,7 +389,7 @@ class evaluacion{
         $html = '';
         $contenido='';
         include $conexion;
-        $sql_version = "SELECT version, version_descripcion FROM control_cliente WHERE status_conexion = 1 AND id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC";
+        $sql_version = "SELECT version, ANY_VALUE(version_descripcion) AS version_descripcion FROM control_cliente WHERE status_conexion = 1 AND id_cliente = $id_empresa  GROUP BY version ORDER BY version DESC";
         $query_serv = $mysqli->query($sql_version);
 		if($query_serv->num_rows>=1){
             while($fila=$query_serv->fetch_array(MYSQLI_ASSOC)){
@@ -438,7 +445,7 @@ class evaluacion{
         $html = '';
         $contenido='';
         include $conexion;
-        $sql_version = "SELECT id_tipo_riesgo, descripcion FROM tipo_riesgo WHERE status_riesgo = 1";
+        $sql_version = "SELECT id_tipo_riesgo, descripcion FROM tipo_riesgo WHERE status_tipo_riesgo = 1";
         $query_serv = $mysqli->query($sql_version);
 		if($query_serv->num_rows>=1){
             while($fila=$query_serv->fetch_array(MYSQLI_ASSOC)){
@@ -457,7 +464,7 @@ class evaluacion{
         $html = '';
         $contenido='';
         include $conexion;
-        $sql_version = "SELECT id_tipo_control, descripcion FROM tipo_control WHERE status_control = 1";
+        $sql_version = "SELECT id_tipo_control, descripcion FROM tipo_control WHERE status_tipo_control = 1";
         $query_serv = $mysqli->query($sql_version);
 		if($query_serv->num_rows>=1){
             while($fila=$query_serv->fetch_array(MYSQLI_ASSOC)){
